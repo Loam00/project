@@ -1,0 +1,84 @@
+<div class="page" (window:keydown)="keyListener(currentIndex, $event)">
+
+    <!-- MODALE DELETE -->
+
+    <app-modal-delete [idFile]="idFileGallery" [(isDelete)]="showDelete" (idDelete)="delete($event)"></app-modal-delete>
+
+    <!-- LIGHTBOX -->
+    <div class="lightbox" *ngIf="showMask">
+      <span class="count">{{currentIndex + 1}}/{{totalCount}}</span>
+
+        <div class="btn-lightbox">
+          <div class="gallery-bar">
+            <button (click)="downloadFile()">
+              <i class='bx bx-download'></i>
+            </button>
+
+
+            <button (click)="openDelete(currentLightboxImage.id_file)">
+              <i class='bx bx-trash-alt' ></i>
+            </button>
+          </div>
+
+          <div class="btn-close">
+            <button (click)="closeGallery()">
+              <i class='bx bx-x'></i>
+            </button>
+          </div>
+        </div>
+
+
+      <button class="arrow-gallery-btn prev-btn" (click)="prev(currentIndex)" [hidden]="currentIndex == 0">
+        <i class='bx bxs-left-arrow icon-lightbox-gallery icon-prev'></i>
+      </button>
+
+      <button class="arrow-gallery-btn next-btn" (click)="next(currentIndex)" [hidden]="currentIndex == totalCount - 1">
+        <i class='bx bxs-right-arrow icon-lightbox-gallery icon-next'></i>
+      </button>
+
+      <div class="lightbox-img">
+        <img [src]="currentLightboxImage.path" [alt]="currentLightboxImage.name">
+      </div>
+    </div>
+
+    <!-- FILE UPLOAD -->
+
+    <app-file-upload [formText]="titleText" (sendFormData)="onSubmit($event)"></app-file-upload>
+
+
+    <!-- DISPLAY FILES -->
+
+    <div class="file-card">
+
+      <ng-container *ngIf="!check">
+        <div class="noStoredFile">No {{titleText}}s stored</div>
+      </ng-container>
+
+      <div class="wrapper1" *ngIf="check">
+
+          <div class="file-element" *ngFor="let file of files | slice:leftExtrem:rightExtrem + 1; index as fileNumber;">
+
+            <div class="img-container">
+              <img class="img-display" src={{file.path}} alt={{file.name}} (click)="openGalleryAtImage(fileNumber)" loading="lazy">
+            </div>
+
+            <div class="information">
+              <span class="name-display" [title]="file.name">{{file.name}}</span>
+              <button class="btn-delete-from-gallery" (click)="openDelete(file.id_file)">
+                <i class='bx bx-trash-alt delete-trash' ></i>
+              </button>
+            </div>
+
+          </div>
+
+      </div>
+
+      <div class="pageNumbers">
+        <div *ngFor="let page of pages; index as pageNumber">
+          <button class="pageButton" (click)="changePage(pageNumber, 'click')">{{pageNumber + 1}}</button>
+        </div>
+      </div>
+
+    </div>
+
+  </div>

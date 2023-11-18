@@ -1,0 +1,103 @@
+<div class="page" (window:keydown)="keyListener(currentIndex, $event)">
+
+  <!-- MODALE DELETE -->
+
+  <app-modal-delete [idFile]="idFileMusic" [(isDelete)]="showDelete" (idDelete)="delete($event)"></app-modal-delete>
+
+  <!-- LIGHTBOX -->
+  <div class="lightbox" *ngIf="showMask">
+    <span class="count">{{currentIndex + 1}}/{{totalCount}}</span>
+
+      <div class="btn-lightbox">
+        <div class="lightbox-bar">
+          <button (click)="downloadFile()">
+            <i class='bx bx-download'></i>
+          </button>
+
+
+          <button (click)="openDelete(currentTrack.id_file)">
+            <i class='bx bx-trash-alt' ></i>
+          </button>
+        </div>
+
+        <div class="btn-close">
+          <button (click)="closeMusic()">
+            <i class='bx bx-x'></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="track-container">
+        <div class="track-info">
+          <p id="track-title">{{currentTrack.name}}</p>
+          <div class="progress-container">
+            <div class="progress"></div>
+          </div>
+        </div>
+
+        <audio crossorigin="anonymous" id="track-audio">
+          <source [src]="currentTrack.path" type="audio/mp3" />
+        </audio>
+
+        <div class="img-container">
+          <img [src]="defaultIMG" id="track-cover">
+        </div>
+
+        <div class="navigation">
+
+          <button id="prev-track" class="nav-btn" (click)="prev(currentIndex)" [hidden]="currentIndex == -1">
+            <i class='bx bx-skip-previous' ></i>
+          </button>
+
+          <button id="play-track" class="nav-btn play-btn" (click)="play(currentIndex)">
+            <i class='play-button bx bxs-right-arrow'></i>
+          </button>
+
+          <button id="next-track" class="nav-btn" (click)="next(currentIndex)">
+            <i class='bx bx-skip-next'></i>
+          </button>
+
+        </div>
+      </div>
+
+
+
+  </div>
+
+  <!-- FILE UPLOAD -->
+
+  <app-file-upload [formText]="titleText" (sendFormData)="onSubmit($event)"></app-file-upload>
+
+
+  <!-- DISPLAY FILES -->
+
+  <div class="file-card">
+
+    <ng-container *ngIf="!check">
+      <div class="noStoredFile">No {{titleText}}s stored</div>
+    </ng-container>
+
+    <div class="wrapper" *ngIf="check">
+
+        <div class="music-file" *ngFor="let file of files | slice:leftExtrem:rightExtrem + 1; index as fileNumber;">
+
+          <div class="music-container">
+            <span [title]="file.name" (click)="openMusic(fileNumber)">{{file.name}}</span>
+            <button class="btn-delete-from-music" (click)="openDelete(file.id_file)">
+              <i class='bx bx-trash-alt delete-trash' ></i>
+            </button>
+          </div>
+
+        </div>
+
+    </div>
+
+    <div class="pageNumbers">
+      <div *ngFor="let page of pages; index as pageNumber">
+        <button class="pageButton" (click)="changePage(pageNumber, 'click')">{{pageNumber + 1}}</button>
+      </div>
+    </div>
+
+  </div>
+
+</div>

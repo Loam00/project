@@ -1,0 +1,20 @@
+  <div class="page">
+
+<!-- NAVBAR ARCHIVE -->
+    <div class="navBar">
+      <div style="display: flex;">
+        <a class="navBarItem" *ngFor="let navItem of navDataArchive" [routerLink]="navItem.routeLink"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{exact:true}"
+          >
+          <i style="padding: 0 5px;" [class]="navItem.icon"></i>
+          <span style="padding-right: 5px;">
+            {{navItem.label}}
+          </span>
+        </a>
+      </div>
+    </div>
+
+    <router-outlet></router-outlet>
+
+  </div>

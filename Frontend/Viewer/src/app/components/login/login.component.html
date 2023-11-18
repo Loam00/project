@@ -1,0 +1,21 @@
+<div class="page">
+  <div class="wrapper">
+    <form [formGroup]="loginForm" (ngSubmit)="login()" novalidate>
+
+      <h1>Login</h1>
+
+      <div class="input-box">
+        <input type="email" placeholder="Email" formControlName="email" required>
+        <i class='bx bx-envelope' ></i>
+      </div>
+
+      <div class="input-box">
+        <input type="password" placeholder="Password" formControlName="password" required>
+        <i class='bx bx-lock-alt' ></i>
+      </div>
+
+      <button type="submit" [disabled]="!loginForm.valid">Login</button>
+
+    </form>
+  </div>
+</div>

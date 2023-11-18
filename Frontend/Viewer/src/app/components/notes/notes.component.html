@@ -1,0 +1,127 @@
+<div class="page" (window:keydown)="keyListener(currentIndex, $event)">
+
+
+    <!-- MODALE DELETE -->
+
+    <app-modal-delete [idFile]="idFileNote" [(isDelete)]="showDelete" (idDelete)="delete($event)"></app-modal-delete>
+
+    <!-- MODALE EDIT -->
+
+    <app-modal-edit [(isEdit)]="showEdit" [formData]="this.editForm" (editResult)="edit($event)"></app-modal-edit>
+
+    <!-- SHOW NOTE -->
+
+    <div class="noteViewer" *ngIf="this.showMask">
+
+      <div class="noteBoxBar">
+
+        <div class="noteOption">
+          <button (click)="openDelete(currentNote.id_notes)">
+            <i class='bx bx-trash-alt' ></i>
+          </button>
+          <button (click)="openEdit(currentNote)">
+            <i class='bx bx-edit-alt' ></i>
+          </button>
+        </div>
+
+        <div class="btn-close">
+          <button (click)="closeNote()">
+            <i class='bx bx-x'></i>
+          </button>
+        </div>
+
+      </div>
+
+      <div class="left div-btn">
+        <button class="arrow-note-btn" (click)="prev(currentIndex)" [hidden]="currentIndex == 0">
+          <i class='bx bxs-left-arrow icon-lightbox-gallery icon-prev'></i>
+        </button>
+      </div>
+
+
+      <div class="noteBoxViewer">
+
+        <div class="noteBoxHeader">
+          <span>{{currentNote.title}}</span>
+          <span>Note #{{currentIndex + 1}}</span>
+        </div>
+
+        <textarea disabled>{{currentNote.text}}</textarea>
+
+      </div>
+
+      <div class="right div-btn">
+        <button class="arrow-note-btn" (click)="next(currentIndex)" [hidden]="currentIndex == this.notes.length - 1">
+          <i class='bx bxs-right-arrow icon-lightbox-gallery icon-next'></i>
+        </button>
+      </div>
+
+
+    </div>
+
+    <div class="wrapper" id="formNotes">
+
+      <h1>Notes</h1>
+
+      <button (click)="openNoteForm()">
+        <span *ngIf="!isOpen">
+          <i class='bx bx-plus-medical'></i>
+          Create Note
+        </span>
+        <span *ngIf="isOpen">
+          <i class='bx bx-x'></i>
+          Close
+        </span>
+      </button>
+
+      <form #formDirective="ngForm" [formGroup]="noteForm" *ngIf="isOpen" (ngSubmit)="createNote(noteForm.value)" novalidate>
+
+        <div class="input-box">
+          <input type="text" placeholder="Title" formControlName="title" required>
+        </div>
+
+        <textarea type="text" placeholder="Text" formControlName="text" (keyup)="resizeTextarea($event)" required></textarea>
+
+        <button type="submit" [disabled]="!noteForm.valid">Create</button>
+
+      </form>
+    </div>
+
+    <div class="wrapperNotes">
+
+    <ng-container *ngIf="!check">
+        <div class="noNotes">No notes yet</div>
+    </ng-container>
+
+    <div class="displayNotes" *ngIf="check">
+
+      <div class="note" *ngFor="let note of notes | slice:leftExtrem:rightExtrem + 1; index as noteNumber;">
+
+        <div class="note-header">
+          <span>{{note.title}}</span>
+          <span>Note #{{noteNumber + 1 + leftExtrem}}</span>
+        </div>
+
+        <div class="note-text" (click)="openNote(noteNumber)">{{note.text}}</div>
+
+        <div class="bottomNote">
+
+          <button style="width: 74px;"  (click)="openDelete(note.id_notes)">
+            <i class='bx bx-x-circle'></i> Delete
+          </button>
+
+          <button (click)="openEdit(note)">Edit</button>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="pageNumbers">
+      <div *ngFor="let page of pages; index as pageNumber">
+        <button class="pageButton" (click)="changePage(pageNumber, 'click')">{{pageNumber + 1}}</button>
+      </div>
+    </div>
+
+  </div>
+
+</div>

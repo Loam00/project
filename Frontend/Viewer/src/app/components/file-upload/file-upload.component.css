@@ -1,0 +1,178 @@
+/* FILE CARDS */
+
+.file-card {
+  display: flex;
+  border-radius: .5rem;
+  margin: 0 20px 20px;
+}
+
+/* WRAPPERS */
+
+.wrapper {
+  width: 420px;
+  height: 331px;
+  background: transparent;
+  border: 2px solid rgba(255, 255, 255, .2);
+  backdrop-filter: blur(20px);
+  box-shadow: 0 0 10px rgba(0, 0, 0, .2);
+  color: white;
+  padding: 30px 30px;
+  margin: 0 0.75rem 0 0;
+  border-radius: 20px;
+}
+
+.wrapper h1 {
+  font-size: 36px;
+  text-align: center;
+}
+
+.wrapper button {
+  width: 100%;
+  height: 45px;
+  background: white;
+  border: none;
+  border-radius: 40px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, .1);
+  cursor: pointer;
+  font-size: 16px;
+  color: rgb(110, 2, 2);
+  font-weight: 600;
+}
+
+.wrapper button:hover {
+  outline: 3px solid rgb(110, 2, 2);
+}
+
+.wrapper .input-box {
+  position: relative;
+  width: 100%;
+  height: 50px;
+  margin: 30px 0;
+}
+
+.input-box input {
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  outline: none;
+  border: 2px solid rgba(255, 255, 255, .2);
+  border-radius: 40px;
+  font-size: 16px;
+  color: white;
+  padding: 20px 45px 20px 20px;
+}
+
+/* LABEL FILE */
+
+.label-file {
+  border: 2px solid rgba(255, 255, 255, .2);
+  border-radius: 40px;
+  font-size: 16px;
+  color: white;
+  width: 100%;
+  height: 50px;
+  align-items: center;
+  display: flex;
+  margin-bottom: 30px;
+}
+
+.label-file span {
+  color: rgba(255, 255, 255, .5);
+  padding: 0 20px;
+}
+
+
+
+input[type="file"] {
+  opacity: 0;
+  position: absolute;
+  width: 85%;
+  height: 50px;
+  z-index: 99;
+  cursor: pointer;
+  border-radius: 40px;
+}
+
+/* UPLOADING-FILE */
+
+.uploading-file {
+  max-width: 331px;
+  max-height: 331px;
+  background: transparent;
+  backdrop-filter: blur(20px);
+  outline: none;
+  border: 2px solid rgba(255, 255, 255, .2);
+  box-shadow: 0 0 10px rgba(0, 0, 0, .2);
+  padding: 30px 30px;
+  margin: 0 0 0 0.75rem;
+  border-radius: 20px;
+}
+
+/* WARNING MODAL */
+
+.modal {
+  background: rgba(0, 0, 0, 0.6);
+  position: absolute;
+  width: 100%;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modalBlock {
+  color: white;
+  background: transparent;
+  border: 2px solid white;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 0 10px rgba(0, 0, 0, .2);
+  border-radius: 20px;
+  padding: 30px;
+  width: 500px;
+  height: 200px;
+}
+
+.btn-modal {
+  justify-content: space-between;
+  display: flex;
+  padding: 20px;
+  color: white;
+  right: 0;
+  bottom: 0;
+  position: absolute;
+  transition: all 0.5s ease;
+}
+
+.btn-modal button:hover {
+  color: rgb(110, 2, 2);
+  background: white;
+  border: 2px solid rgb(110, 2, 2);
+}
+
+.btn-delete {
+  color: white;
+  width: 100px;
+  background: transparent;
+  border: 2px solid white;
+  border-radius: 20px;
+  padding: 5px 10px;
+  align-items: center;
+  justify-content: space-between;
+  display: flex;
+  transition: all 0.3s ease;
+}
+
+.btn-abort {
+  color: white;
+  background: transparent;
+  border: 2px solid white;
+  border-radius: 20px;
+  padding: 5px 10px;
+  transition: all 0.3s ease;
+}

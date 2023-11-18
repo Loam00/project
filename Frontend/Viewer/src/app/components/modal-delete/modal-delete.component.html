@@ -1,0 +1,15 @@
+    <!-- MODALE DELETE -->
+    <div class="modal" id="modalDelete" (window:keydown)="keyListener(this.idFile, $event)">
+      <div class="modalBlock">
+        <h1>Delete</h1>
+        <p>Do you really want to delete this file?</p>
+        <div class="btn-modal">
+          <button class="btn-delete" (click)="delete(this.idFile)">
+          Delete
+          <i class='bx bx-x-circle'></i>
+          </button>
+          <button class="btn-abort" (click)="closeDelete()">Abort</button>
+        </div>
+
+      </div>
+    </div>

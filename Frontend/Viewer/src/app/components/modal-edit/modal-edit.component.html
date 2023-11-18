@@ -1,0 +1,27 @@
+    <!-- MODALE EDIT -->
+    <div class="modal" id="modalEdit" (window:keydown.escape)="closeEdit()">
+      <div class="modalBlock">
+
+        <h1>Edit</h1>
+
+        <div class="wrapper">
+          <form #formDirective="ngForm" [formGroup]="noteForm" (ngSubmit)="edit(noteForm.value)" novalidate>
+
+            <div class="input-box">
+              <input type="text" placeholder="Title" formControlName="title" required>
+            </div>
+
+            <textarea type="text" placeholder="Text" formControlName="text" (keyup)="resizeTextarea($event)" required></textarea>
+
+            <div class="btn-modal">
+              <button type="submit" [disabled]="!noteForm.valid">
+              Edit
+              </button>
+              <button type="button" (click)="closeEdit()">Abort</button>
+            </div>
+
+          </form>
+        </div>
+
+      </div>
+    </div>

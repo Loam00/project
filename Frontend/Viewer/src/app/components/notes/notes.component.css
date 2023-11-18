@@ -1,0 +1,420 @@
+* {
+  padding: 0;
+}
+
+.page {
+  position: absolute;
+  width: 100%;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* WRAPPERS */
+
+.wrapper {
+  display: flex;
+  padding: 30px;
+  justify-content: flex-start;
+  background: transparent;
+  backdrop-filter: blur(20px);
+  border: 2px solid rgba(255, 255, 255, .2);
+  border-radius: 20px;
+  margin: 20px;
+  color: white;
+  flex-direction: column;
+  height: 181px;
+  max-height: 550px;
+}
+
+.wrapper-collapsed {
+  height: 430px;
+  max-height: 550px;
+}
+
+.wrapper h1 {
+  font-size: 36px;
+  margin-bottom: 40px;
+}
+
+.wrapper button {
+  width: 150px;
+  border-radius: 40px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, .1);
+  cursor: pointer;
+  font-size: 16px;
+  color: white;
+  background: rgba(0, 0, 0, .5);
+  height: 45px;
+  border: 2px solid rgba(255, 255, 255, .2);
+  transition: all 0.2s ease;
+}
+
+.wrapper button:hover {
+  border: 2px solid rgb(110, 2, 2);
+  color: rgb(110, 2, 2);
+  background: white;
+  font-weight: 500;
+}
+
+.wrapper .input-box {
+  position: relative;
+  width: 100%;
+  height: 50px;
+  margin: 30px 0;
+}
+
+.input-box input {
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  outline: none;
+  border: 2px solid rgba(255, 255, 255, .2);
+  border-radius: 40px;
+  font-size: 16px;
+  color: white;
+  padding: 20px;
+}
+
+.wrapper textarea {
+  width: 100%;
+  height: 64px;
+  max-height: 184px;
+  padding: 20px;
+  outline: none;
+  resize: none;
+  background: transparent;
+  color: white;
+  border-radius: 40px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  font-size: 16px;
+  line-height: 20px;
+  scrollbar-color: transparent transparent;
+  margin-bottom: 30px;
+}
+
+/* NOTES */
+
+.wrapperNotes {
+  display: flex;
+  height: calc(100vh - 241px);
+  padding: 30px 30px 46px 30px;
+  background: transparent;
+  backdrop-filter: blur(20px);
+  border: 2px solid rgba(255, 255, 255, .2);
+  border-radius: 20px;
+  margin: 0 20px 20px;
+  color: white;
+  min-height: calc(100% - 610px);
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.wrapperNotes-collapsed {
+  height: calc(100vh - 490px);
+  min-height: calc(100% - 610px)
+}
+
+.displayNotes {
+  display: grid;
+  width: 100%;
+  height: 100%;
+  grid-template-columns: 20% 20% 20% 20% 20%;
+  grid-template-rows: 50% 50%;
+}
+
+.noNotes {
+  align-self: center;
+  padding: 10px;
+  border: 1px solid rgba(255, 255, 255, .2);
+  border-radius: 20px;
+  font-size: 30px;
+  line-height: 45px;
+}
+
+.note {
+  background: rgba(0, 0, 0, 0.05);
+  padding: 5px;
+  border: 2px solid rgba(255, 255, 255, .2);
+  border-radius: 10px;
+  margin: 5px;
+  position: relative;
+  transition: all 0.2s ease;
+  z-index: 1;
+}
+
+.note:hover {
+  cursor: pointer;
+  background: white;
+  color: rgb(110, 2, 2);
+  border: 2px solid rgb(110, 2, 2);
+  font-weight: 500;
+  .note-header span {
+    border: 2px solid rgb(110, 2, 2);
+  }
+  .note-text {
+    padding: 4px;
+    border-radius: 5px;
+    border: 2px solid rgb(110, 2, 2);
+  }
+  .bottomNote button {
+    color: rgb(110, 2, 2);
+    border: 2px solid rgb(110, 2, 2);
+    z-index: 2;
+    transition: all 0.2s ease;
+  }
+  .bottomNote button:hover {
+    color: white;
+    background: rgb(110, 2, 2);
+    border: 2px solid rgb(110, 2, 2);
+
+  }
+}
+
+.note-header {
+  padding: 2px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.note-header span {
+  border: 2px solid rgba(255, 255, 255, .2);
+  border-radius: 5px;
+  padding: 2px 3px;
+}
+
+.note-text {
+  height: calc(100% - 80px);
+  margin: 2px;
+  padding: 6px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.bottomNote {
+  display: flex;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  padding: 5px;
+  justify-content: space-between;
+  width: 130px;
+  z-index: 2;
+}
+
+.bottomNote button {
+  color: white;
+  background: transparent;
+  border: 2px solid white;
+  border-radius: 15px;
+  padding: 2px 5px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 2;
+}
+
+/* CHANGE PAGE */
+
+.pageNumbers {
+  display: flex;
+  position: absolute;
+  bottom: 0;
+  padding: 5px;
+}
+
+.pageButton {
+  background: transparent;
+  color: white;
+  border-radius: 40px;
+  width: 30px;
+  height: 30px;
+  margin: 3px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid rgba(255, 255, 255, 0.5);
+}
+
+.selectedButton {
+  background: white;
+  color: rgb(110, 2, 2);
+  font-weight: 500;
+  border: 2px solid rgb(110, 2, 2);
+}
+
+.pageButton:hover {
+  background: white;
+  color: rgb(110, 2, 2);
+  font-weight: 500;
+  border: 2px solid rgb(110, 2, 2);
+}
+
+/* OPEN NOTE AND NAVIGATION */
+
+.noteViewer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, .85);
+  z-index: 1;
+}
+
+.noteBoxViewer {
+  position: absolute;
+  color: white;
+  background: transparent;
+  border: 2px solid white;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 0 10px rgba(0, 0, 0, .2);
+  border-radius: 20px;
+  padding: 30px;
+  width: 800px;
+  max-height: 800px;
+  display: flex;
+  flex-direction: column;
+}
+
+.noteBoxViewer textarea {
+  margin: 0 20px 20px;
+  padding: 10px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  text-overflow: ellipsis;
+  overflow: scroll;
+  scrollbar-color: transparent transparent;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 20px;
+  background: transparent;
+  resize: none;
+  color: white;
+  min-height: 642px;
+}
+
+.noteBoxHeader {
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.noteBoxHeader span {
+  border: 2px solid rgba(255, 255, 255, .3);
+  border-radius: 30px;
+  padding: 5px 10px;
+}
+
+.noteBoxBar {
+  display: flex;
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 12%;
+  height: 10%;
+  z-index: 2;
+  justify-content: space-around;
+  padding: 10px;
+}
+
+.noteOption {
+  display: flex;
+  justify-content: space-around;
+  width: 60%;
+  align-self: flex-end;
+  border: 2px solid white;
+  border-radius: 30px;
+  align-items: center;
+  height: 70%;
+}
+
+.noteBoxBar button {
+  color: white;
+  background: 0 0;
+  border: 0;
+  font-size: 25px;
+  opacity: 0.5;
+  border-radius: 40px;
+  height: 85%;
+  align-items: center;
+  display: flex;
+}
+
+.noteBoxBar button:hover {
+  color: red;
+}
+
+.btn-close {
+  display: flex;
+  align-self: flex-start;
+  border: 2px solid white;
+  border-radius: 20px;
+  width: 15%;
+  justify-content: center;
+  align-items: center;
+  height: 30px;
+}
+
+.arrow-note-btn {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  margin: 20px;
+  text-align: center;
+  background: 0 0;
+  border: 2px solid white;
+  border-radius: 30px;
+  cursor: pointer;
+  color: #fff;
+  opacity: 0.5;
+  transition: all 0.15s ease;
+}
+
+.div-btn {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50px;
+  width: 50px;
+}
+
+.right {
+  left: 420px;
+}
+
+.left {
+  right: 420px;
+}
+
+.arrow-note-btn:hover {
+  opacity: 0.9;
+}
+
+.arrow-note-btn:active {
+  opacity: 0.5;
+}
+
+.icon-next {
+  font-size: 30px;
+  position: relative;
+  left: 3px;
+}
+
+.icon-prev {
+  font-size: 30px;
+  position: relative;
+  left: -3px;
+}

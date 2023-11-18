@@ -1,0 +1,323 @@
+* {
+  margin: 0px;
+  padding: 0px;
+  box-sizing: border-box;
+}
+
+.page {
+  width: 100%;
+  min-height: calc(100vh - 102px);
+  display: flex;
+  flex-direction: column;
+}
+
+/* FILE CARDS */
+
+
+.file-card {
+  display: flex;
+  margin: 0 20px 20px;
+  height: calc(100vh - 469px);
+  background: transparent;
+  border: 2px solid rgba(255, 255, 255, .2);
+  backdrop-filter: blur(20px);
+  box-shadow: 0 0 10px rgba(0, 0, 0, .2);
+  color: white;
+  padding: 30px 30px 46px 30px;
+  border-radius: 20px;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+
+.noStoredFile {
+  align-self: center;
+  padding: 10px;
+  border: 1px solid rgba(255, 255, 255, .2);
+  border-radius: 20px;
+  font-size: 30px;
+}
+
+/* WRAPPER */
+
+.wrapper {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-rows: 10% 10% 10% 10% 10% 10% 10% 10% 10% 10%;
+}
+
+.music-file {
+  display: flex;
+  border: 2px solid rgba(255, 255, 255, .2);
+  box-shadow: 0 0 10px rgba(0, 0, 0, .2);
+  border-radius: 10px;
+  padding: 5px;
+  margin: 2.5px;
+  flex-direction: column;
+  transition: all 0.5s ease;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+}
+
+.music-file:hover {
+  background: white;
+  color: rgb(110, 2, 2);
+  .delete-trash {
+    color:rgb(110, 2, 2);
+  }
+}
+
+.music-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.delete-trash{
+  color: white;
+  font-size: 20px;
+  transition: all 0.5s ease;
+}
+
+.btn-delete-from-music {
+  display: flex;
+  cursor: pointer;
+  border-radius: 50%;
+  background-color: transparent;
+  border: none;
+  align-items: center;
+}
+
+/* LIGHTBOX IMAGE */
+
+.lightbox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, .85);
+  z-index: 1;
+}
+
+.count {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 7%;
+  height: 10%;
+  color: white;
+  opacity: 0.7;
+  font-size: 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 5px;
+}
+
+.btn-lightbox {
+  display: flex;
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 12%;
+  height: 10%;
+  z-index: 2;
+  justify-content: space-around;
+  padding: 10px;
+}
+
+.btn-lightbox button {
+  color: white;
+  background: 0 0;
+  border: 0;
+  font-size: 25px;
+  opacity: 0.5;
+  border-radius: 40px;
+  height: 85%;
+  align-items: center;
+  display: flex;
+}
+
+.btn-lightbox button:hover {
+  color: red;
+}
+
+.lightbox-bar {
+  display: flex;
+  justify-content: space-around;
+  width: 60%;
+  align-self: flex-end;
+  border: 2px solid white;
+  border-radius: 30px;
+  align-items: center;
+  height: 70%;
+}
+
+.btn-close {
+  display: flex;
+  align-self: flex-start;
+  border: 2px solid white;
+  border-radius: 20px;
+  width: 15%;
+  justify-content: center;
+  align-items: center;
+  height: 30px;
+}
+
+.btn-close button {
+  display: flex;
+}
+
+/* MUSIC PLAYER */
+
+.track-container {
+  border-radius: 15px;
+  box-shadow: 3px 5px 25px 0 rgb(119, 56, 0);
+  display: flex;
+  padding: 20px 30px;
+  position: relative;
+  z-index: 10;
+  height: 600px;
+  width: 400px;
+  background: transparent;
+  backdrop-filter: blur(20px);
+  border: 2px solid rgb(119, 56, 0);
+}
+
+.img-container {
+  position: absolute;
+  width: 110px;
+  height: 110px;
+  bottom: 0;
+  padding: 20px;
+  margin: 0 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.img-container img {
+  width: inherit;
+  height: 110px;
+  border-radius: 50%;
+  object-fit: cover;
+
+  animation: rotate 3s linear infinite;
+  animation-play-state: paused;
+}
+
+.track-container.play .img-container img {
+  animation-play-state: running;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.navigation {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+
+.nav-btn {
+  border: 0;
+  color: rgba(119, 56, 0, 0.8);
+  font-size: 35px;
+  cursor: pointer;
+  padding: 20px 0;
+  margin: 0 20px;
+  background: transparent;
+}
+
+.play-btn {
+  color: rgb(119, 56, 0);
+}
+
+.nav-btn:focus {
+  outline: 0;
+}
+
+.track-info {
+  position: absolute;
+  bottom: 68px;
+  right: 0;
+  width: 225px;
+  padding: 5px 20px;
+  color: white;
+}
+
+.track-info h4 {
+  margin: 0;
+}
+
+.progress-container {
+  background: transparent;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 10px 0;
+  height: 6px;
+  width: 100%;
+  border: 1px solid rgb(119, 56, 0);
+}
+
+.progress {
+  background-color: rgb(119, 56, 0);
+  border-radius: 5px;
+  height: 100%;
+  width: 0%;
+  transition: width 0.1s linear;
+}
+
+/* CHANGE PAGE */
+
+.pageNumbers {
+  display: flex;
+  position: absolute;
+  bottom: 0;
+  padding: 5px;
+}
+
+.pageButton {
+  background: transparent;
+  color: white;
+  border-radius: 40px;
+  width: 30px;
+  height: 30px;
+  margin: 3px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid rgba(255, 255, 255, 0.5);
+}
+
+.selectedButton {
+  background: white;
+  color: rgb(110, 2, 2);
+  font-weight: 500;
+  border: 2px solid rgb(110, 2, 2);
+}
+
+.pageButton:hover {
+  background: white;
+  color: rgb(110, 2, 2);
+  font-weight: 500;
+  border: 2px solid rgb(110, 2, 2);
+}

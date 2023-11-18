@@ -1,0 +1,40 @@
+<!-- FILECARD UPLOAD -->
+<div class="file-card">
+
+  <div class="modal" *ngIf="showNotAllowed" (window:keydown)="keyListener($event)">
+    <div class="modalBlock">
+      <h1>Warning</h1>
+      <p>This file type is not allowed!</p>
+      <p>Please, choose a file of type {{formText}}</p>
+      <div class="btn-modal">
+        <button class="btn-abort" (click)="closeWarning()">Ok</button>
+      </div>
+
+    </div>
+  </div>
+
+
+  <div class="wrapper">
+    <h1>Upload {{formText}}</h1>
+    <form [formGroup]="form" (ngSubmit)="onSubmit(form.value)">
+
+      <div class="input-box">
+        <input formControlName="name" type="text" placeholder="Name">
+      </div>
+
+      <div>
+        <label for="file-input" class="label-file">
+          <input id="file-input" type="file" (change)="uploadFile($event)" multiple>
+          <span id="labelSpan">{{fileText}}</span>
+        </label>
+      </div>
+
+    <button class="btn" type="submit">Upload</button>
+    </form>
+  </div>
+
+  <div *ngIf="imageData" >
+    <img [src]="imageData" [alt]="form.value.name" class="uploading-file">
+  </div>
+
+</div>
