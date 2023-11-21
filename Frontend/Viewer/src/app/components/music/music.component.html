@@ -36,7 +36,7 @@
         </div>
 
         <audio crossorigin="anonymous" id="track-audio">
-          <source [src]="currentTrack.path" type="audio/mp3" />
+          <source [src]="this.currentTrack.fileStream" type="audio/mpeg">
         </audio>
 
         <div class="img-container">
@@ -79,7 +79,7 @@
 
     <div class="wrapper" *ngIf="check">
 
-        <div class="music-file" *ngFor="let file of files | slice:leftExtrem:rightExtrem + 1; index as fileNumber;">
+        <div class="music-file" *ngFor="let file of fileObject | slice:leftExtrem:rightExtrem + 1; index as fileNumber;">
 
           <div class="music-container">
             <span [title]="file.name" (click)="openMusic(fileNumber)">{{file.name}}</span>

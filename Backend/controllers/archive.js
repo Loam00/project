@@ -1,4 +1,4 @@
-const { validationResult } = require('express-validator');
+const { validationResult, header } = require('express-validator');
 const Archive = require('../Models/archive');
 const fs = require('fs')
 
@@ -24,7 +24,7 @@ exports.storeFile = async (req, res) => {
     } else if (type[0] == "video") {
         pathFinder = "video";        
     }
-    const path = `http://localhost:3000/${pathFinder}/` + req.file.filename;
+    const path = `${pathFinder}/` + req.file.filename;
 
 
     try {
@@ -48,16 +48,31 @@ exports.storeFile = async (req, res) => {
 
 exports.getFile = async (req, res) => {
     try {
-        const user = req.params.id_user;
-        const type = req.params.type;
-        const allFiles = await Archive.getFile(user, type); 
-        res.status(200).json(allFiles);       
+        const id_file = req.params.id_file;
+        const [allFiles] = await Archive.getFile(id_file);
+
+        console.log(`${allFiles.path}  // ${allFiles.type}`);  
+        res.status(200).type(`${allFiles.type}/mpeg`).sendFile(`C:/Users/Stefano/Documents/GitHub/project/Backend/${allFiles.path}`);
+        console.log(res) 
     } catch (err) {
         if (!err.statusCode) {
             err.statusCode = 500;
         }       
     }
 };
+
+exports.getFileObject = async (req, res) => {
+    try {
+        const user = req.params.id_user;
+        const type = req.params.type;
+        const allFiles = await Archive.getFileObject(user, type);  
+        res.status(200).json(allFiles);              
+    } catch (err) {
+        if (!err.statusCode) {
+            err.statusCode = 500;
+        }             
+    }
+}
 
 exports.deleteFile = async (req, res) => {
     try {
@@ -67,7 +82,7 @@ exports.deleteFile = async (req, res) => {
         const [getPath] = await Archive.getPathFromId(id_file);
         fileName = getPath.path.split("/");
 
-        const deleteFile = await fs.unlink(`C:/Users/Stefano/Desktop/Programmi/NewProject/Backend/${folder}/${fileName[4]}`, (err) => {
+        const deleteFile = await fs.unlink(`C:/Users/Stefano/Desktop/Programmi/NewProject/Backend/${folder}/${fileName[1]}`, (err) => {
             if(err) throw err;
         });
         console.log(deleteFile);

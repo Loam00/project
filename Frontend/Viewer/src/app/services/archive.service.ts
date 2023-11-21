@@ -5,12 +5,15 @@ import { ErrorHandlerService } from './error-handler.service';
 import { Files } from '../models/Files';
 import { User } from '../models/User';
 
+
 @Injectable({
   providedIn: 'root'
 })
 export class ArchiveService {
 
   private url = "http://localhost:3000/archive"
+
+  blob: Blob;
 
   constructor(private http: HttpClient, private errorHandlerService: ErrorHandlerService) { }
 
@@ -19,6 +22,12 @@ export class ArchiveService {
   };
 
   async uploadFile(Data: Pick<Files, "name" | "file" >, userId: Pick<User, "id_user">): Promise<{}> {
+    console.log(Data)
+    /* const reader = new FileReader();
+    reader.onload = () => {
+      reader.readAsArrayBuffer(Data.file);
+      this.blob = new Blob([reader.result], {type: Data.file.type})
+    } */
     const fileData = new FormData();
     fileData.append("name", Data.name);
     fileData.append("id_user", userId.toString());
@@ -28,19 +37,27 @@ export class ArchiveService {
     }
 
     return await lastValueFrom(this.http.post<{}>(this.url, fileData).pipe(
-      catchError(this.errorHandlerService.handleError<{}>("uploadImage"))
+      catchError(this.errorHandlerService.handleError<{}>("uploadFile"))
       ))
   }
 
-  async getFile(userId: number | Pick<User, "id_user">, folder: string): Promise<Files[]> {
-    return await lastValueFrom(this.http.get<Files[]>(`${this.url}/${folder}/${userId}`, { responseType: "json"} )
+  async getFileObject(userId: number | Pick<User, "id_user">, type: string): Promise<Files[]> {
+    console.log("ehi1")
+    return await lastValueFrom(this.http.get<Files[]>(`${this.url}/fileObject/${type}/${userId}`, { responseType: "json" } )
     .pipe(
-      catchError(this.errorHandlerService.handleError<Files[]>("getFile", []))
+      catchError(this.errorHandlerService.handleError<Files[]>("getFileObject", []))
       ))
   }
 
-  async delete(fileId: number | Pick<Files, "id_file">, type: string): Promise<{}>{
-    return await lastValueFrom(this.http.delete<{}>( `${this.url}/${type}/${fileId}`, this.httpOptions ).pipe(
+  async getFile(id_file: number): Promise<File> {
+    return await lastValueFrom(this.http.get<File>(`${this.url}/${id_file}`)
+    .pipe(
+      catchError(this.errorHandlerService.handleError<File>("getFile"))
+      ))
+  }
+
+  async delete(fileId: number | Pick<Files, "id_file">, folder: string): Promise<{}>{
+    return await lastValueFrom(this.http.delete<{}>( `${this.url}/${folder}/${fileId}`, this.httpOptions ).pipe(
       catchError(this.errorHandlerService.handleError<{}>("delete"))
     ))
   }

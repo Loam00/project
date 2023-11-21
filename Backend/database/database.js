@@ -29,7 +29,7 @@ db.run(sql); */
 
 // QUERY THE DATABASE
 
-/* sql = 'SELECT * FROM files';
+sql = 'SELECT * FROM files';
 db.all(sql, [], (err, rows) => {
     if (err) return console.error(err.message);
     
@@ -37,7 +37,7 @@ db.all(sql, [], (err, rows) => {
         console.log(row);
     })
     
-}); */
+});
 
 
 /* const ciao = db.get("SELECT COUNT(*) FROM notes", (err, row) => {
@@ -68,7 +68,7 @@ db.run(sql, ['Gino', 1], (err) => {
 
 // DELETE DATA
 
-sql = 'DELETE FROM files WHERE id_file = ?';
+/* sql = 'DELETE FROM files WHERE id_file = ?';
 db.run(sql, [6], (err) => {
     if (err) return console.error(err.message);
-})
+}) */

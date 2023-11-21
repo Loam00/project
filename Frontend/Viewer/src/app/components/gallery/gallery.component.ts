@@ -54,7 +54,7 @@ export class GalleryComponent implements OnInit{
   /* GETTING CODE */
 
   getFiles(): Promise<Files[]> {
-    return this.archiveService.getFile(this.userId, this.typeName);
+    return this.archiveService.getFileObject(this.userId, this.typeName);
   }
 
   reset() {

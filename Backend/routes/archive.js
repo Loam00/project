@@ -6,7 +6,9 @@ const router = express.Router();
 
 router.post('/', upload.single('file'), archiveControllers.storeFile);
 
-router.get('/:type/:id_user', archiveControllers.getFile);
+router.get('/:id_file', archiveControllers.getFile);
+
+router.get('/fileObject/:type/:id_user', archiveControllers.getFileObject)
 
 router.delete('/:folder/:id_file', archiveControllers.deleteFile);
 

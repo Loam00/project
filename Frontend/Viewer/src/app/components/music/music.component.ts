@@ -20,15 +20,15 @@ export class MusicComponent implements OnInit{
   totalCount = 0;
   currentTrack: Files;
   check = false;
-  files: Files[];
+  fileObject: Files[];
   idFileMusic: number;
   userId: Pick<User, "id_user"> | number;
   typeName = "audio";
   folderName = "music";
   showDownload = false;
   showDelete = false;
-  defaultIMG = "http://localhost:3000/images/default/360_F_551971815_nXv1fCga04nd9fkjYr0rV0lbu5mG4lHk.jpg";
-  defaultTrack = "C:/Users/Stefano/Desktop/Programmi/NewProject/Backend/music/10.mp3"
+  defaultIMG = "assets/images/360_F_551971815_nXv1fCga04nd9fkjYr0rV0lbu5mG4lHk.jpg";
+  defaultTrack = "assets/file_example_WAV_1MG.wav"
   leftExtrem = 0;
   rightExtrem = 9;
   pageIndex = 0;
@@ -45,15 +45,17 @@ export class MusicComponent implements OnInit{
 
   ngOnInit(): void {
     this.userId = this.authService.userId;
-    this.files = [];
+    this.fileObject = [];
     this.pages = [];
     this.reset();
-    this.currentTrack = this.files[0];
+    this.currentTrack = this.fileObject[0];
   }
 
   constructor( private archiveService: ArchiveService, private authService: AuthService) {}
 
   public async onSubmit(Data: Pick<Files, "name" | "file">): Promise<void> {
+    console.log(Data)
+
     if(Data.name == null){
       const sendName = Data.file.name.split(".");
       Data.name = sendName[0];
@@ -65,16 +67,39 @@ export class MusicComponent implements OnInit{
 
   /* GETTING CODE */
 
-  getFiles(): Promise<Files[]> {
-    return this.archiveService.getFile(this.userId, this.typeName);
+  getFileObject(): Promise<Files[]> {
+    return this.archiveService.getFileObject(this.userId, this.typeName);
+  }
+
+  getFiles(id_file: number): Promise<File> {
+    console.log(this.archiveService.getFile(id_file));
+    return this.archiveService.getFile(id_file);
   }
 
   reset() {
-    this.getFiles().then( (files) => {
-      this.files = files;
+/*     this.getFiles().then( (file) => {
+      let i = 0;
+      file.forEach( fetchedFile => {
+        this.fileObject[i].fileStream = fetchedFile;
+        i++;
+        console.log("oooo")
+      });
+    }); */
+
+    this.getFileObject().then( (files) => {
+/*       for(let i=0; i<files.length; i++) {
+        this.fileObject[i].created = files[i].created;
+        this.fileObject[i].id_file = files[i].id_file;
+        this.fileObject[i].id_user = files[i].id_user;
+        this.fileObject[i].name = files[i].name;
+        console.log("ehi")
+      } */
+
+      this.fileObject = files
+
       console.log(files)
 
-      const pageLength = Math.ceil(this.files.length/10);
+      const pageLength = Math.ceil(this.fileObject.length/10);
       this.pages = [];
 
       for(let i = 0; i < pageLength; i++) {
@@ -86,9 +111,9 @@ export class MusicComponent implements OnInit{
   }
 
   checking() {
-    if( this.files.length != 0 ) {
+    if( this.fileObject.length != 0 ) {
       this.check = true;
-    } else if ( this.files.length == 0) {
+    } else if ( this.fileObject.length == 0) {
       this.check = false;
     }
   }
@@ -109,10 +134,10 @@ export class MusicComponent implements OnInit{
     await this.archiveService.delete(idFile, this.folderName);
     if(this.currentIndex != 0)
     {
-      this.currentTrack = this.files[this.currentIndex - 1];
+      this.currentTrack = this.fileObject[this.currentIndex - 1];
       this.currentIndex = this.currentIndex - 1;
     } else {
-      this.currentTrack = this.files[this.currentIndex + 1];
+      this.currentTrack = this.fileObject[this.currentIndex + 1];
     }
     this.totalCount = this.totalCount - 1;
     this.reset();
@@ -140,8 +165,13 @@ export class MusicComponent implements OnInit{
 
   openMusic(currentIndex: number) {
     this.showMask = true;
-    this.currentTrack = this.files[currentIndex];
-    console.log(this.currentTrack.path + " / " + currentIndex)
+    this.currentTrack = this.fileObject[currentIndex];
+    this.getFiles(this.currentTrack.id_file).then( (file) => {
+      this.currentTrack.fileStream = file;
+    })
+
+    console.log(this.currentTrack.fileStream)
+    console.log(this.currentTrack.name + " / " + currentIndex)
 /*     this.loadSong(this.currentTrack); */
   }
 
@@ -201,7 +231,7 @@ export class MusicComponent implements OnInit{
 
   prev(index: number) {
     if(index > 0) {
-      this.currentTrack = this.files[index - 1];
+      this.currentTrack = this.fileObject[index - 1];
       this.currentIndex = index - 1;
 
       if ( this.currentIndex == this.leftExtrem - 1 && this.pageIndex >= 1) {
@@ -212,8 +242,8 @@ export class MusicComponent implements OnInit{
   }
 
   next(index: number) {
-    if(index < this.files.length - 1) {
-      this.currentTrack = this.files[index + 1];
+    if(index < this.fileObject.length - 1) {
+      this.currentTrack = this.fileObject[index + 1];
       this.currentIndex = index + 1;
 
       if ( this.currentIndex == this.rightExtrem + 1 && this.pageIndex < this.pages.length - 1) {
@@ -230,7 +260,7 @@ export class MusicComponent implements OnInit{
       } else if (event.key == "ArrowLeft") {
         this.prev(index);
       } else if (event.key == "Delete") {
-        this.openDelete(this.files[index].id_file)
+        this.openDelete(this.fileObject[index].id_file)
       } else if (event.key == "Escape") {
         this.showMask = false;
       } else if (event.key == "Enter") {

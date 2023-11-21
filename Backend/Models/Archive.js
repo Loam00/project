@@ -26,7 +26,30 @@ module.exports = class Archive {
         return create;
     }
 
-    static async getFile(id_user, type) {        
+    static async getFile(id_file) {        
+        // CONNECT
+        const db = new sqlite3.Database('C:/Users/Stefano/Desktop/Programmi/NewProject/Backend/database/database.db', sqlite3.OPEN_READWRITE, (err) => {
+            if (err) {
+                console.log("errorissimo");
+                return console.error(err.message);
+            }
+        });
+        
+        // GET DATA FROM DATABASE        
+        const fetch = await new Promise( resolve => {
+
+            let sql = "SELECT path, type FROM files WHERE id_file = ?"
+
+            db.all(sql, [id_file], (err, rows) => {
+            if (err) resolve ( console.error(err.message) )
+            else resolve (rows);
+        })
+    })
+
+        return fetch;
+    }
+
+    static async getFileObject(id_user, type) {        
         // CONNECT
         const db = new sqlite3.Database('C:/Users/Stefano/Desktop/Programmi/NewProject/Backend/database/database.db', sqlite3.OPEN_READWRITE, (err) => {
             if (err) {
