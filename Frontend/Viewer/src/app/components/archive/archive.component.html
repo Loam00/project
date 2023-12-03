@@ -15,6 +15,35 @@
       </div>
     </div>
 
+    <div *ngIf="checkRoute" class="contentPage">
+
+      <!-- LAST IMAGES -->
+
+      <div class="lastImages">
+
+        <span *ngIf="!checkImages">This are your last uploaded images</span>
+        <span *ngIf="checkImages">No uploaded images</span>
+
+        <div *ngIf="!checkImages" class="displayLastImages">
+
+          <div class="imageContainer firstImage">
+            <img src={{lastImages[0].path}} alt={{lastImages[0].name}}>
+          </div>
+
+          <div class="imageContainer" *ngFor="let image of lastImages | slice:1:4">
+            <img src={{image.path}} alt={{image.name}}>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- LAST DOCUMENTS -->
+
+      <div></div>
+
+    </div>
+
     <router-outlet></router-outlet>
 
   </div>

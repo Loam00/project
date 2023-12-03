@@ -12,7 +12,7 @@ module.exports = class User {
     static async check(email) {
 
         //CONNECT TO DATABASE
-        const db = new sqlite3.Database('C:/Users/Stefano/Desktop/Programmi/NewProject/Backend/database/database.db', sqlite3.OPEN_READWRITE, (err) => {
+        const db = new sqlite3.Database('C:/Users/Stefano/Documents/GitHub/project/Backend/database/database.db', sqlite3.OPEN_READWRITE, (err) => {
             if (err) {                
                 return console.error(err.message);
             }
@@ -46,7 +46,7 @@ module.exports = class User {
     static async save(user) { 
 
         // CONNECT TO DATABASE
-         const db = new sqlite3.Database('C:/Users/Stefano/Desktop/Programmi/NewProject/Backend/database/database.db', sqlite3.OPEN_READWRITE, (err) => {
+         const db = new sqlite3.Database('C:/Users/Stefano/Documents/GitHub/project/Backend/database/database.db', sqlite3.OPEN_READWRITE, (err) => {
             if (err) {
                 console.log("errorissimo");
                 return console.error(err.message);
@@ -69,7 +69,7 @@ module.exports = class User {
 
     static async find(email) {
          //CONNECT TO DATABASE
-         const db = new sqlite3.Database('C:/Users/Stefano/Desktop/Programmi/NewProject/Backend/database/database.db', sqlite3.OPEN_READWRITE, (err) => {
+         const db = new sqlite3.Database('C:/Users/Stefano/Documents/GitHub/project/Backend/database/database.db', sqlite3.OPEN_READWRITE, (err) => {
             if (err) {                
                 return console.error(err.message);
             }

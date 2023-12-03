@@ -14,7 +14,7 @@ export class DocumentsComponent implements OnInit{
   titleText = "document";
   idFileDocument: number;
   check = false;
-  files: Files[];
+  fileObject: Files[];
   userId: Pick<User, "id_user"> | number;
   typeName = "application";
   folderName = "documents";
@@ -32,17 +32,66 @@ export class DocumentsComponent implements OnInit{
 
   ngOnInit(): void {
     this.userId = this.authService.userId;
-    this.files = [];
+    this.fileObject = [];
     this.pages = [];
     this.reset();
   }
 
-  public async onSubmit(Data: Pick<Files, "name" | "file">): Promise<void> {
+  checkExistance(fileName: string, fileObjectName: string) {
+    if( fileName == fileObjectName ) {
+      return true;
+    } else {
+      return false
+    }
+  }
+
+  writeFileName(Data: Pick<Files, "name" | "file">) {
+    let givenName = Data.name;
     if(Data.name == null){
       const sendName = Data.file.name.split(".");
       Data.name = sendName[0];
+      givenName = sendName[0];
     }
-    await this.archiveService.uploadFile(Data, this.authService.userId)
+
+    for(let i=0; i<this.fileObject.length; i++) {
+
+      const fileName = this.fileObject[i].name.split(".")
+
+      if(Data.name == fileName[0]) {
+
+        let j = 1;
+        let stop = true;
+        while(stop) {
+          let check = false;
+
+          for(let k=0; k < this.fileObject.length; k++) {
+
+            const fileName = this.fileObject[k].name.split(".");
+
+            if(this.checkExistance(`${givenName}(${j})`, `${fileName[0]}`)) {
+              j++;
+              check = true;
+              break;
+            }
+          }
+          if(check == false) {
+            Data.name = `${givenName}(${j})`;
+            stop = false;
+          }
+        }
+
+        if ( stop == false) {
+          break;
+        }
+      }
+    }
+
+    return Data;
+  }
+
+  public async onSubmit(Data: Pick<Files, "name" | "file">): Promise<void> {
+
+    await this.archiveService.uploadFile(this.writeFileName(Data), this.authService.userId)
     this.reset();
   }
 
@@ -54,9 +103,13 @@ export class DocumentsComponent implements OnInit{
 
   reset() {
     this.getFiles().then( (files) => {
-      this.files = files;
+      this.fileObject = files;
 
-      const pageLength = Math.ceil(this.files.length/10);
+      for(let i=0; i<files.length; i++) {
+        this.fileObject[i].path = "http://localhost:3000/" + files[i].path
+      }
+
+      const pageLength = Math.ceil(this.fileObject.length/10);
       this.pages = [];
 
       for(let i = 0; i < pageLength; i++) {
@@ -68,9 +121,9 @@ export class DocumentsComponent implements OnInit{
   }
 
   checking() {
-    if( this.files.length != 0 ) {
+    if( this.fileObject.length != 0 ) {
       this.check = true;
-    } else if ( this.files.length == 0) {
+    } else if ( this.fileObject.length == 0) {
       this.check = false;
     }
   }
@@ -112,7 +165,7 @@ changePage(pageNumber: number, event: string) {
 
   openDocument(currentIndex: number) {
     this.showMask = true;
-    this.currentDocument = this.files[currentIndex];
+    this.currentDocument = this.fileObject[currentIndex];
   }
 
   closeDocument() {
@@ -121,7 +174,7 @@ changePage(pageNumber: number, event: string) {
 
   prev(index: number) {
     if(index > 0) {
-      this.currentDocument = this.files[index - 1];
+      this.currentDocument = this.fileObject[index - 1];
       this.currentIndex = index - 1;
 
       if ( this.currentIndex == this.leftExtrem - 1 && this.pageIndex >= 1) {
@@ -132,8 +185,8 @@ changePage(pageNumber: number, event: string) {
   }
 
   next(index: number) {
-    if(index < this.files.length - 1) {
-      this.currentDocument = this.files[index + 1];
+    if(index < this.fileObject.length - 1) {
+      this.currentDocument = this.fileObject[index + 1];
       this.currentIndex = index + 1;
 
       if ( this.currentIndex == this.rightExtrem + 1 && this.pageIndex < this.pages.length - 1) {
@@ -150,7 +203,7 @@ changePage(pageNumber: number, event: string) {
       } else if (event.key == "ArrowLeft") {
         this.prev(index);
       } else if (event.key == "Delete") {
-        this.openDelete(this.files[index].id_file)
+        this.openDelete(this.fileObject[index].id_file)
       } else if (event.key == "Escape") {
         this.showMask = false;
       }

@@ -2,74 +2,481 @@
   padding: 0;
 }
 
-body {
+.page {
+  position: absolute;
+  width: 100%;
+  height: 100vh;
+  top: 0;
+  left: 0;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
+  flex-direction: column;
 }
 
+/* WRAPPERS */
+
 .wrapper {
-  width: 70%;
-  background: blue;
+  display: flex;
+  padding: 30px;
+  justify-content: flex-start;
+  background: transparent;
+  backdrop-filter: blur(20px);
+  border: 2px solid rgba(255, 255, 255, .2);
+  border-radius: 20px;
+  margin: 20px;
+  color: white;
+  flex-direction: column;
+  height: 181px;
+  max-height: 550px;
+}
+
+.wrapper-collapsed {
+  height: 430px;
+  max-height: 550px;
+}
+
+.wrapper h1 {
+  font-size: 36px;
+  margin-bottom: 40px;
+}
+
+.wrapper button {
+  width: 150px;
+  border-radius: 40px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, .1);
+  cursor: pointer;
+  font-size: 16px;
+  color: white;
+  background: rgba(0, 0, 0, .5);
+  height: 45px;
+  border: 2px solid rgba(255, 255, 255, .2);
+  transition: all 0.2s ease;
+}
+
+.wrapper button:hover {
+  border: 2px solid rgb(110, 2, 2);
+  color: rgb(110, 2, 2);
+  background: white;
+  font-weight: 500;
+}
+
+.wrapper .input-box {
+  position: relative;
+  width: 100%;
+  height: 50px;
+  margin: 30px 0;
+}
+
+.input-box input {
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  outline: none;
+  border: 2px solid rgba(255, 255, 255, .2);
+  border-radius: 40px;
+  font-size: 16px;
+  color: white;
+  padding: 20px;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button,
+input[type='number']  {
+  -webkit-appearance: none;
+  -moz-appearance: textfield;
+}
+
+/* MOVEMENTS */
+
+.wrapperMovements {
+  display: flex;
+  height: calc(100vh - 241px);
+  padding: 30px 30px 46px 30px;
+  background: transparent;
+  backdrop-filter: blur(20px);
+  border: 2px solid rgba(255, 255, 255, .2);
+  border-radius: 20px;
+  margin: 0 20px 20px;
+  color: white;
+  min-height: calc(100% - 610px);
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.wrapperMovements-collapsed {
+  height: calc(100vh - 490px);
+  min-height: calc(100% - 610px)
+}
+
+.amount {
+  display: flex;
+  align-items: center;
+  margin: 0 0 10px;
+  height: 30%;
+  width: calc(100% - 10px);
+  border: 2px solid rgba(255, 255, 255, .2);
+  border-radius: 20px;
+  padding: 20px;
+  justify-content: space-between;
+}
+
+.totalAmount {
+  font-size: 60px;
+}
+
+.positiveTotal span {
+  color: green;
+}
+
+.negativeTotal span {
+  color: rgb(110, 2, 2);
+}
+
+.in-out-amount {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  height: 100%;
   padding: 10px;
-  border: 1px solid black;
-  border-radius: 10px;
-  margin: 5px
+  margin: 0 200px 0 0;
+}
+
+.in-out-amount span {
+  font-size: 30px;
+  line-height: 30px;
+}
+
+.incomeTotal {
+  border-bottom: 2px solid green;
+}
+
+.outcomeTotal {
+  border-bottom: 2px solid rgb(110, 2, 2);
+}
+
+.displayMovements {
+  display: grid;
+  width: 100%;
+  height: 70%;
+  grid-template-columns: 20% 20% 20% 20% 20%;
+  grid-template-rows: 50% 50%;
+}
+
+.noMovements {
+  align-self: center;
+  padding: 10px;
+  border: 1px solid rgba(255, 255, 255, .2);
+  border-radius: 20px;
+  font-size: 30px;
+  line-height: 45px;
 }
 
 .movement {
-  width: 1300px;
-  background: red;
+  background: rgba(0, 0, 0, 0.05);
   padding: 5px;
-  border: 1px solid black;
+  border: 2px solid rgba(255, 255, 255, .2);
   border-radius: 10px;
   margin: 5px;
+  position: relative;
+  transition: all 0.2s ease;
+  z-index: 1;
 }
 
-.bottomMovement {
+.movement:hover {
+  cursor: pointer;
+  background: white;
+  color: rgb(110, 2, 2);
+  border: 2px solid rgb(110, 2, 2);
+  font-weight: 500;
+  .movement-header span {
+    border: 2px solid rgb(110, 2, 2);
+  }
+  .income span {
+    border: 2px solid rgb(3, 61, 3);
+  }
+  .outcome span {
+    border: 2px solid rgb(110, 2, 2);
+  }
+  .movement-text {
+    padding: 4px;
+    border-radius: 5px;
+    border: 2px solid rgb(110, 2, 2);
+  }
+  .bottomNote button {
+    color: rgb(110, 2, 2);
+    border: 2px solid rgb(110, 2, 2);
+    z-index: 2;
+    transition: all 0.2s ease;
+  }
+  .bottomNote button:hover {
+    color: white;
+    background: rgb(110, 2, 2);
+    border: 2px solid rgb(110, 2, 2);
+
+  }
+}
+
+.movement-header {
+  padding: 2px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.income span {
+  background: green;
+  color: white;
+}
+
+.outcome span {
+  background: rgb(110, 2, 2);
+  color: white;
+}
+
+.movement-header span {
+  border: 2px solid rgba(255, 255, 255, .2);
+  border-radius: 5px;
+  padding: 2px 3px;
+}
+
+.movement-num {
+  max-width: 120px;
+}
+
+.movement-text {
+  height: calc(100% - 80px);
+  margin: 2px;
+  padding: 6px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.bottomNote {
   display: flex;
   position: absolute;
-  left: 80%;
-  justify-content: space-between;
-  align-content: end;
-}
-
-.movement-number {
-  position: absolute;
-  background-color: white;
-  right: 10px;
-  border-radius: 3px;
-  padding: 2px;
-}
-
-.editForm {
-  padding: 2px;
-}
-
-.modal {
-  background: rgba(0, 0, 0, 0.6);
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
   right: 0;
   bottom: 0;
+  padding: 5px;
+  justify-content: space-between;
+  width: 130px;
+  z-index: 2;
+}
 
-  display: none;
+.bottomNote button {
+  color: white;
+  background: transparent;
+  border: 2px solid white;
+  border-radius: 15px;
+  padding: 2px 5px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 2;
+}
+
+/* CHANGE PAGE */
+
+.pageNumbers {
+  display: flex;
+  position: absolute;
+  bottom: 0;
+  padding: 5px;
+}
+
+.pageButton {
+  background: transparent;
+  color: white;
+  border-radius: 40px;
+  width: 30px;
+  height: 30px;
+  margin: 3px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid rgba(255, 255, 255, 0.5);
+}
+
+.selectedButton {
+  background: white;
+  color: rgb(110, 2, 2);
+  font-weight: 500;
+  border: 2px solid rgb(110, 2, 2);
+}
+
+.pageButton:hover {
+  background: white;
+  color: rgb(110, 2, 2);
+  font-weight: 500;
+  border: 2px solid rgb(110, 2, 2);
+}
+
+/* OPEN NOTE AND NAVIGATION */
+
+.purseViewer {
+  display: flex;
   align-items: center;
   justify-content: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, .85);
+  z-index: 1;
 }
 
-.modalBlock {
-  background: white;
-  width: 500px;
-  height: 200px;
+.purseBoxViewer {
+  position: absolute;
+  color: white;
+  background: transparent;
+  border: 2px solid white;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 0 10px rgba(0, 0, 0, .2);
+  border-radius: 20px;
+  padding: 30px;
+  width: 800px;
+  max-height: 800px;
+  display: flex;
+  flex-direction: column;
 }
 
-.modalForm {
-  background:white;
-  width: 500px;
-  height: 200px;
+.purseBoxViewer textarea {
+  margin: 0 20px 20px;
+  padding: 10px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  text-overflow: ellipsis;
+  overflow: scroll;
+  scrollbar-color: transparent transparent;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 20px;
+  background: transparent;
+  resize: none;
+  color: white;
+}
+
+.date {
+  justify-content: end;
+  display: flex;
+  margin-right: 20px;
+  font-style: italic;
+}
+
+.purseBoxHeader {
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.purseBoxHeader span {
+  border: 2px solid rgba(255, 255, 255, .3);
+  border-radius: 30px;
+  padding: 5px 10px;
+}
+
+.purseBoxBar {
+  display: flex;
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 12%;
+  height: 10%;
+  z-index: 2;
+  justify-content: space-around;
+  padding: 10px;
+}
+
+.purseOption {
+  display: flex;
+  justify-content: space-around;
+  width: 60%;
+  align-self: flex-end;
+  border: 2px solid white;
+  border-radius: 30px;
+  align-items: center;
+  height: 70%;
+}
+
+.purseBoxBar button {
+  color: white;
+  background: 0 0;
+  border: 0;
+  font-size: 25px;
+  opacity: 0.5;
+  border-radius: 40px;
+  height: 85%;
+  align-items: center;
+  display: flex;
+}
+
+.purseBoxBar button:hover {
+  color: red;
+}
+
+.btn-close {
+  display: flex;
+  align-self: flex-start;
+  border: 2px solid white;
+  border-radius: 20px;
+  width: 15%;
+  justify-content: center;
+  align-items: center;
+  height: 30px;
+}
+
+.arrow-note-btn {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  margin: 20px;
+  text-align: center;
+  background: 0 0;
+  border: 2px solid white;
+  border-radius: 30px;
+  cursor: pointer;
+  color: #fff;
+  opacity: 0.5;
+  transition: all 0.15s ease;
+}
+
+.div-btn {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50px;
+  width: 50px;
+}
+
+.right {
+  left: 420px;
+}
+
+.left {
+  right: 420px;
+}
+
+.arrow-note-btn:hover {
+  opacity: 0.9;
+}
+
+.arrow-note-btn:active {
+  opacity: 0.5;
+}
+
+.icon-next {
+  font-size: 30px;
+  position: relative;
+  left: 3px;
+}
+
+.icon-prev {
+  font-size: 30px;
+  position: relative;
+  left: -3px;
 }

@@ -29,8 +29,8 @@ db.run(sql); */
 
 // QUERY THE DATABASE
 
-sql = 'SELECT * FROM files';
-db.all(sql, [], (err, rows) => {
+sql = 'SELECT * FROM movements';
+db.all(sql, (err, rows) => {
     if (err) return console.error(err.message);
     
     rows.forEach( (row ) => {
@@ -38,6 +38,13 @@ db.all(sql, [], (err, rows) => {
     })
     
 });
+
+/* sql = "SELECT * FROM files WHERE id_user = ? AND type = ?"
+
+        db.all(sql, [1, 'audio'], (err, rows) => {
+            if (err) ( console.error(err.message) )
+            else console.log(rows);
+        }) */
 
 
 /* const ciao = db.get("SELECT COUNT(*) FROM notes", (err, row) => {
@@ -67,8 +74,8 @@ db.run(sql, ['Gino', 1], (err) => {
 }) */
 
 // DELETE DATA
-
-/* sql = 'DELETE FROM files WHERE id_file = ?';
-db.run(sql, [6], (err) => {
+ 
+/* sql = 'DELETE FROM movements WHERE id_movement = ?';
+db.run(sql, [2], (err) => {
     if (err) return console.error(err.message);
 }) */

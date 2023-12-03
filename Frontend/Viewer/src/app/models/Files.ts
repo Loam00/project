@@ -2,7 +2,7 @@ export interface Files {
   id_file: number;
   id_user: number;
   name: string;
-  fileStream: Blob;
+  audioStream: AudioBufferSourceNode;
   file: File;
   path: string;
   created: Date;

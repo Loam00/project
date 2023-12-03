@@ -73,7 +73,8 @@ exports.editMovements = async (req, res) => {
         console.log(movement)
 
         const editResponse = await Movements.editMovements(movement);
-        res.status(200).json(editResponse, {message: "Edited"});  
+        res.status(200).json(editResponse);
+        res.status(201).json( {message: "Edited"});     
     } catch (err) {
         if (!err.statusCode) {
             err.statusCode = 500;

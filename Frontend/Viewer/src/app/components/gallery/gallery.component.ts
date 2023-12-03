@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Files } from 'src/app/models/Files';
 import { User } from 'src/app/models/User';
@@ -19,7 +19,7 @@ export class GalleryComponent implements OnInit{
   totalCount = 0;
   currentLightboxImage: Files;
   check = false;
-  files: Files[];
+  fileObject: Files[];
   idFileGallery: number;
   userId: Pick<User, "id_user"> | number;
   typeName = "image";
@@ -34,34 +34,87 @@ export class GalleryComponent implements OnInit{
 
   ngOnInit(): void {
     this.userId = this.authService.userId;
-    this.files = [];
+    this.fileObject = [];
     this.pages = [];
     this.reset();
-    this.currentLightboxImage = this.files[0];
+    this.currentLightboxImage = this.fileObject[0];
   }
 
   constructor( private archiveService: ArchiveService, private authService: AuthService) {}
 
-  public async onSubmit(Data: Pick<Files, "name" | "file">): Promise<void> {
+  checkExistance(fileName: string, fileObjectName: string) {
+    if( fileName == fileObjectName ) {
+      return true;
+    } else {
+      return false
+    }
+  }
+
+  writeFileName(Data: Pick<Files, "name" | "file">) {
+    let givenName = Data.name;
     if(Data.name == null){
       const sendName = Data.file.name.split(".");
       Data.name = sendName[0];
+      givenName = sendName[0];
     }
-    await this.archiveService.uploadFile(Data, this.authService.userId)
+
+    for(let i=0; i<this.fileObject.length; i++) {
+
+      const fileName = this.fileObject[i].name.split(".")
+
+      if(Data.name == fileName[0]) {
+
+        let j = 1;
+        let stop = true;
+        while(stop) {
+          let check = false;
+
+          for(let k=0; k < this.fileObject.length; k++) {
+
+            const fileName = this.fileObject[k].name.split(".");
+
+            if(this.checkExistance(`${givenName}(${j})`, `${fileName[0]}`)) {
+              j++;
+              check = true;
+              break;
+            }
+          }
+          if(check == false) {
+            Data.name = `${givenName}(${j})`;
+            stop = false;
+          }
+        }
+
+        if ( stop == false) {
+          break;
+        }
+      }
+    }
+
+    return Data;
+  }
+
+  public async onSubmit(Data: Pick<Files, "name" | "file">): Promise<void> {
+
+    await this.archiveService.uploadFile(this.writeFileName(Data), this.authService.userId)
     this.reset();
   }
 
   /* GETTING CODE */
 
-  getFiles(): Promise<Files[]> {
+  getFileObject(): Promise<Files[]> {
     return this.archiveService.getFileObject(this.userId, this.typeName);
   }
 
   reset() {
-    this.getFiles().then( (files) => {
-      this.files = files;
+    this.getFileObject().then( (files) => {
+      this.fileObject = files;
 
-      const pageLength = Math.ceil(this.files.length/10);
+      for(let i=0; i<files.length; i++) {
+        this.fileObject[i].path = "http://localhost:3000/" + files[i].path
+      }
+
+      const pageLength = Math.ceil(this.fileObject.length/10);
       this.pages = [];
 
       for(let i = 0; i < pageLength; i++) {
@@ -73,9 +126,9 @@ export class GalleryComponent implements OnInit{
   }
 
   checking() {
-    if( this.files.length != 0 ) {
+    if( this.fileObject.length != 0 ) {
       this.check = true;
-    } else if ( this.files.length == 0) {
+    } else if ( this.fileObject.length == 0) {
       this.check = false;
     }
   }
@@ -93,13 +146,14 @@ export class GalleryComponent implements OnInit{
   }
 
   public async delete(idFile: number): Promise<void> {
+    console.log(this.currentIndex)
     await this.archiveService.delete(idFile, this.folderName);
     if(this.currentIndex != 0)
     {
-      this.currentLightboxImage = this.files[this.currentIndex - 1];
+      this.currentLightboxImage = this.fileObject[this.currentIndex - 1];
       this.currentIndex = this.currentIndex - 1;
     } else {
-      this.currentLightboxImage = this.files[this.currentIndex + 1];
+      this.currentLightboxImage = this.fileObject[this.currentIndex + 1];
     }
     this.totalCount = this.totalCount - 1;
     this.reset();
@@ -129,8 +183,8 @@ export class GalleryComponent implements OnInit{
     this.showMask = true;
     index = index + ( this.pageIndex * 10 );
     this.currentIndex = index;
-    this.currentLightboxImage = this.files[index]
-    this.totalCount = this.files.length;
+    this.currentLightboxImage = this.fileObject[index]
+    this.totalCount = this.fileObject.length;
   }
 
   closeGallery() {
@@ -139,7 +193,7 @@ export class GalleryComponent implements OnInit{
 
   prev(index: number) {
     if(index > 0) {
-      this.currentLightboxImage = this.files[index - 1];
+      this.currentLightboxImage = this.fileObject[index - 1];
       this.currentIndex = index - 1;
 
       if ( this.currentIndex == this.leftExtrem - 1 && this.pageIndex >= 1) {
@@ -150,8 +204,8 @@ export class GalleryComponent implements OnInit{
   }
 
   next(index: number) {
-    if(index < this.files.length - 1) {
-      this.currentLightboxImage = this.files[index + 1];
+    if(index < this.fileObject.length - 1) {
+      this.currentLightboxImage = this.fileObject[index + 1];
       this.currentIndex = index + 1;
 
       if ( this.currentIndex == this.rightExtrem + 1 && this.pageIndex < this.pages.length - 1) {
@@ -168,7 +222,7 @@ export class GalleryComponent implements OnInit{
       } else if (event.key == "ArrowLeft") {
         this.prev(index);
       } else if (event.key == "Delete") {
-        this.openDelete(this.files[index].id_file)
+        this.openDelete(this.fileObject[index].id_file)
       } else if (event.key == "Escape") {
         this.showMask = false;
       }

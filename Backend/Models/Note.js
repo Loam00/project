@@ -4,7 +4,7 @@ module.exports = class Note {
 
     static async createNote(note) {        
         // CONNECT
-        const db = new sqlite3.Database('C:/Users/Stefano/Desktop/Programmi/NewProject/Backend/database/database.db', sqlite3.OPEN_READWRITE, (err) => {
+        const db = new sqlite3.Database('C:/Users/Stefano/Documents/GitHub/project/Backend/database/database.db', sqlite3.OPEN_READWRITE, (err) => {
             if (err) {
                 console.log("errorissimo");
                 return console.error(err.message);
@@ -28,7 +28,7 @@ module.exports = class Note {
 
     static async fetchNotes(id_user) {        
         // CONNECT
-        const db = new sqlite3.Database('C:/Users/Stefano/Desktop/Programmi/NewProject/Backend/database/database.db', sqlite3.OPEN_READWRITE, (err) => {
+        const db = new sqlite3.Database('C:/Users/Stefano/Documents/GitHub/project/Backend/database/database.db', sqlite3.OPEN_READWRITE, (err) => {
             if (err) {
                 console.log("errorissimo");
                 return console.error(err.message);
@@ -51,7 +51,7 @@ module.exports = class Note {
 
     static async deleteNotes(id_notes) {        
         // CONNECT
-        const db = new sqlite3.Database('C:/Users/Stefano/Desktop/Programmi/NewProject/Backend/database/database.db', sqlite3.OPEN_READWRITE, (err) => {
+        const db = new sqlite3.Database('C:/Users/Stefano/Documents/GitHub/project/Backend/database/database.db', sqlite3.OPEN_READWRITE, (err) => {
             if (err) {
                 console.log("errorissimo");
                 return console.error(err.message);
@@ -74,7 +74,7 @@ module.exports = class Note {
 
     static async editNotes(note) {        
         // CONNECT
-        const db = new sqlite3.Database('C:/Users/Stefano/Desktop/Programmi/NewProject/Backend/database/database.db', sqlite3.OPEN_READWRITE, (err) => {
+        const db = new sqlite3.Database('C:/Users/Stefano/Documents/GitHub/project/Backend/database/database.db', sqlite3.OPEN_READWRITE, (err) => {
             if (err) {
                 console.log("errorissimo");
                 return console.error(err.message);

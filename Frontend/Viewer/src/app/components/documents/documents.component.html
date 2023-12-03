@@ -47,7 +47,7 @@
 
       <div class="wrapper" *ngIf="check">
 
-          <div class="document-element" *ngFor="let file of files | slice:leftExtrem:rightExtrem + 1; index as fileNumber;">
+          <div class="document-element" *ngFor="let file of fileObject | slice:leftExtrem:rightExtrem + 1; index as fileNumber;">
 
             <div class="document-container">
               <span [title]="file.name" (click)="openDocument(fileNumber)">{{file.name}}</span>

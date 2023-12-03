@@ -87,6 +87,13 @@
   padding: 20px;
 }
 
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button,
+input[type='number']  {
+  -webkit-appearance: none;
+  -moz-appearance: textfield;
+}
+
 .wrapper textarea {
   width: 100%;
   height: 64px;

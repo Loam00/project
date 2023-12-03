@@ -22,20 +22,20 @@ httpOptions: { headers: HttpHeaders } = {
 
 addMovement(
   movementData: Partial<Movement>,
-  userId: Pick<User, "id_user">): Observable<Movement> {
-  return this.http
+  userId: Pick<User, "id_user">): Promise<Movement> {
+  return lastValueFrom(this.http
   .post<Movement>( this.url, {object: movementData.object, amount: movementData.amount, id_user: userId}, this.httpOptions)
   .pipe(
     first(),
     catchError(this.errorHandlerService.handleError<Movement>("addMovement"))
-  );
+  ));
 }
 
 async fetchMovements(userId: number | Pick<User, "id_user">): Promise<Movement[]> {
   return await lastValueFrom(this.http
   .get<Movement[]>( `${this.url}/${userId}`, { responseType: "json"} )
   .pipe(
-    catchError(this.errorHandlerService.handleError<Movement[]>("fetchNotes", []))
+    catchError(this.errorHandlerService.handleError<Movement[]>("fetchMovements", []))
     ))
 }
 
@@ -45,9 +45,8 @@ async delete(movementId: number | Pick<Movement, "id_movement">): Promise<{}>{
   ))
 }
 
-async edit(movementData: Partial<Movement>, movementId: number | Pick<Movement, "id_movement">): Promise<Movement>{
-  console.log(movementData.object, movementData.amount, movementId)
-  return await lastValueFrom(this.http.put<Movement>( `${this.url}/${movementId}`, {object: movementData.object, amount: movementData.amount, id_movement: movementId}, this.httpOptions ).pipe(
+async edit(movementData: Pick<Movement, "object" | "amount" | "id_movement">): Promise<Movement>{
+  return await lastValueFrom(this.http.put<Movement>( `${this.url}/${movementData.id_movement}`, {object: movementData.object, amount: movementData.amount, id_movement: movementData.id_movement}, this.httpOptions ).pipe(
     first(),
     catchError(this.errorHandlerService.handleError<Movement>("edit"))
   ))

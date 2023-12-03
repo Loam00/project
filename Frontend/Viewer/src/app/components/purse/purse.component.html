@@ -1,94 +1,140 @@
-<body>
-  <div class="card">
-    <h1>Purse</h1>
+<div class="page" (window:keydown)="keyListener(currentIndex, $event)">
 
-    <div class="card-head">Total amount</div>
 
-    <div class="wrapper">
-      <button class="btn-createNote" (click)="isOpen = !isOpen">
-        <span *ngIf="!isOpen">
-          <i class='bx bx-plus-medical'></i>
-          Add movement
-        </span>
-        <span *ngIf="isOpen">
+  <!-- MODALE DELETE -->
+
+  <app-modal-delete [idFile]="idFileMovement" [(isDelete)]="showDelete" (idDelete)="delete($event)"></app-modal-delete>
+
+  <!-- MODALE EDIT -->
+
+  <app-modal-edit [(isEdit)]="showEdit" [formMovementData]="this.editForm" [type]="this.editType" (editResult)="edit($event)"></app-modal-edit>
+
+  <!-- SHOW NOTE -->
+
+  <div class="purseViewer" *ngIf="this.showMask">
+
+    <div class="purseBoxBar">
+
+      <div class="purseOption">
+        <button (click)="openDelete(currentMovement.id_movement)">
+          <i class='bx bx-trash-alt' ></i>
+        </button>
+        <button (click)="openEdit(currentMovement)">
+          <i class='bx bx-edit-alt' ></i>
+        </button>
+      </div>
+
+      <div class="btn-close">
+        <button (click)="closeMovement()">
           <i class='bx bx-x'></i>
-          Close
-        </span>
-      </button>
+        </button>
+      </div>
 
-      <form #formDirective="ngForm" [formGroup]="purseForm" *ngIf="isOpen" (ngSubmit)="addMovement(purseForm.value)" novalidate>
-
-        <div class="input-box-title">
-          <input type="text" placeholder="Object" formControlName="object" required>
-        </div>
-
-        <div class="input-box-text">
-          <input type="text" placeholder="Amount" formControlName="amount" required>
-        </div>
-
-        <button class="btn-createNote" type="submit" [disabled]="!purseForm.valid">Add movement</button>
-
-      </form>
     </div>
 
-    <ng-container *ngIf="!check">
-        <div class="card-head">No movements yet</div>
-    </ng-container>
-
-    <ng-container *ngIf="check">
-      <div class="container">
-        <div class="movement" *ngFor="let movement of movements; index as movementNumber;">
-
-          <div class="movement-header">
-            <span class="movement-object">{{movement.object}}</span>
-            <span class="movement-number">Movement #{{movementNumber + 1}}</span>
-          </div>
-
-          <div class="movement-amount">{{movement.amount}}</div>
-
-          <div class="bottomMovement">
-
-            <button class="btn-delete"  (click)="openDelete(movement.id_movement)">
-              <i class='bx bx-x-circle'></i> Delete
-            </button>
-
-            <div class="modal" id="modalDelete">
-              <div class="modalBlock">
-                <h1>Delete</h1>
-                <p>Do you really want to delete this movement?</p>
-                <button class="btn-delete" (click)="delete(idMovement);">
-                  <i class='bx bx-x-circle'></i> Delete
-                </button>
-                <button (click)="closeDelete()">Abort</button>
-              </div>
-            </div>
+    <div class="left div-btn">
+      <button class="arrow-note-btn" (click)="prev(currentIndex)" [hidden]="currentIndex == 0">
+        <i class='bx bxs-left-arrow icon-lightbox-gallery icon-prev'></i>
+      </button>
+    </div>
 
 
-            <button class="btn-edit" (click)="isEdit = true" (click)="openEdit(movement.id_movement)">
-              <i class='bx bx-x-circle'></i> Edit
-            </button>
+    <div class="purseBoxViewer">
 
-            <div class="modal" id="modalEdit">
-              <div class="modalForm">
-                <form #formDirective="ngForm" [formGroup]="editForm" *ngIf="isEdit" (ngSubmit)="edit(editForm.value, idMovement)" novalidate>
-                  <div class="input-box-title">
-                    <input type="text" placeholder="Object" formControlName="object" required>
-                  </div>
+      <div class="purseBoxHeader" [ngClass]="currentIncomeState ? 'income' : 'outcome' ">
+        <span>{{currentMovement.amount}} €</span>
+        <span>Movement #{{currentIndex + 1}}</span>
+      </div>
 
-                  <div class="input-box-text">
-                    <input type="text" placeholder="Amount" formControlName="amount" required>
-                  </div>
+      <textarea disabled>{{currentMovement.object}}</textarea>
 
-                  <button class="btn-editNote" type="submit" [disabled]="!editForm.valid">Edit</button>
-                </form>
-                <button (click)="isEdit = false" (click)="closeEdit()" >Abort</button>
-              </div>
-            </div>
-          </div>
+      <span class="date">{{currentMovement.created}}</span>
 
-        </div>
+    </div>
+
+    <div class="right div-btn">
+      <button class="arrow-note-btn" (click)="next(currentIndex)" [hidden]="currentIndex == this.movements.length - 1">
+        <i class='bx bxs-right-arrow icon-lightbox-gallery icon-next'></i>
+      </button>
+    </div>
+
+
+  </div>
+
+  <div class="wrapper" id="formMovements">
+
+    <h1>Purse</h1>
+
+    <button (click)="openMovementForm()">
+      <span *ngIf="!isOpen">
+        <i class='bx bx-plus-medical'></i>
+        Add movement
+      </span>
+      <span *ngIf="isOpen">
+        <i class='bx bx-x'></i>
+        Close
+      </span>
+    </button>
+
+    <form #formDirective="ngForm" [formGroup]="movementForm" *ngIf="isOpen" (ngSubmit)="createMovement(movementForm.value)" novalidate>
+
+      <div class="input-box">
+        <input type="text" placeholder="Object" formControlName="object" required>
+      </div>
+
+      <div class="input-box">
+        <input type="number" step="0.01" placeholder="Amount" formControlName="amount" required>
+      </div>
+
+
+      <button type="submit" [disabled]="!movementForm.valid">Create</button>
+
+    </form>
+  </div>
+
+  <div class="wrapperMovements">
+
+  <ng-container *ngIf="!check">
+      <div class="noMovements">No movements yet</div>
+  </ng-container>
+
+  <div class="amount" *ngIf="check">
+    <div class="totalAmount" [ngClass]="positive ? 'positiveTotal' : 'negativeTotal' ">Total: <span>{{this.total}} €</span></div>
+    <div class="in-out-amount">
+      <span class="incomeTotal">Income: {{this.totalIncome}} €</span>
+      <span class="outcomeTotal">Outcome: {{this.totalOutcome}} €</span>
+    </div>
+  </div>
+
+  <div class="displayMovements" *ngIf="check">
+
+    <div class="movement" *ngFor="let movement of movements | slice:leftExtrem:rightExtrem + 1; index as noteNumber;">
+
+      <div class="movement-header" [ngClass]="movement.income ? 'income' : 'outcome' ">
+        <span>{{movement.amount}} €</span>
+        <span class="movement-num">Movement #{{noteNumber + 1 + leftExtrem}}</span>
+      </div>
+
+      <div class="movement-text" (click)="openMovement(noteNumber)">{{movement.object}}</div>
+
+      <div class="bottomNote">
+
+        <button style="width: 74px;"  (click)="openDelete(movement.id_movement)">
+          <i class='bx bx-x-circle'></i> Delete
+        </button>
+
+        <button (click)="openEdit(movement)">Edit</button>
 
       </div>
-    </ng-container>
+    </div>
   </div>
-</body>
+
+  <div class="pageNumbers">
+    <div *ngFor="let page of pages; index as pageNumber">
+      <button class="pageButton" (click)="changePage(pageNumber, 'click')">{{pageNumber + 1}}</button>
+    </div>
+  </div>
+
+</div>
+
+</div>

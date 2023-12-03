@@ -4,7 +4,7 @@ module.exports = class Archive {
 
     static async addFile(fileData) {        
         // CONNECT
-        const db = new sqlite3.Database('C:/Users/Stefano/Desktop/Programmi/NewProject/Backend/database/database.db', sqlite3.OPEN_READWRITE, (err) => {
+        const db = new sqlite3.Database('C:/Users/Stefano/Documents/GitHub/project/Backend/database/database.db', sqlite3.OPEN_READWRITE, (err) => {
             if (err) {
                 console.log("errorissimo");
                 return console.error(err.message);
@@ -28,7 +28,7 @@ module.exports = class Archive {
 
     static async getFile(id_file) {        
         // CONNECT
-        const db = new sqlite3.Database('C:/Users/Stefano/Desktop/Programmi/NewProject/Backend/database/database.db', sqlite3.OPEN_READWRITE, (err) => {
+        const db = new sqlite3.Database('C:/Users/Stefano/Documents/GitHub/project/Backend/database/database.db', sqlite3.OPEN_READWRITE, (err) => {
             if (err) {
                 console.log("errorissimo");
                 return console.error(err.message);
@@ -51,7 +51,7 @@ module.exports = class Archive {
 
     static async getFileObject(id_user, type) {        
         // CONNECT
-        const db = new sqlite3.Database('C:/Users/Stefano/Desktop/Programmi/NewProject/Backend/database/database.db', sqlite3.OPEN_READWRITE, (err) => {
+        const db = new sqlite3.Database('C:/Users/Stefano/Documents/GitHub/project/Backend/database/database.db', sqlite3.OPEN_READWRITE, (err) => {
             if (err) {
                 console.log("errorissimo");
                 return console.error(err.message);
@@ -74,7 +74,7 @@ module.exports = class Archive {
 
     static async deleteFile(id_file) {        
         // CONNECT
-        const db = new sqlite3.Database('C:/Users/Stefano/Desktop/Programmi/NewProject/Backend/database/database.db', sqlite3.OPEN_READWRITE, (err) => {
+        const db = new sqlite3.Database('C:/Users/Stefano/Documents/GitHub/project/Backend/database/database.db', sqlite3.OPEN_READWRITE, (err) => {
             if (err) {
                 console.log("errorissimo");
                 return console.error(err.message);
@@ -98,7 +98,7 @@ module.exports = class Archive {
 
     static async getPathFromId(id_file) {
          // CONNECT
-         const db = new sqlite3.Database('C:/Users/Stefano/Desktop/Programmi/NewProject/Backend/database/database.db', sqlite3.OPEN_READWRITE, (err) => {
+         const db = new sqlite3.Database('C:/Users/Stefano/Documents/GitHub/project/Backend/database/database.db', sqlite3.OPEN_READWRITE, (err) => {
             if (err) {
                 console.log("errorissimo");
                 return console.error(err.message);

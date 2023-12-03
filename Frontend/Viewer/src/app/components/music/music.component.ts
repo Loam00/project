@@ -5,6 +5,15 @@ import { User } from 'src/app/models/User';
 import { ArchiveService } from 'src/app/services/archive.service';
 import { AuthService } from 'src/app/services/auth.service';
 
+interface currentTime {
+  minutes: number;
+  seconds: number;
+}
+
+interface currentDuration {
+  minutes: number;
+  seconds: number;
+}
 
 @Component({
   selector: 'app-music',
@@ -33,6 +42,11 @@ export class MusicComponent implements OnInit{
   rightExtrem = 9;
   pageIndex = 0;
   pages: number[];
+  context = new AudioContext();
+  currentBuffer: AudioBuffer;
+  source: AudioBufferSourceNode;
+  currentTime: currentTime;
+  currentDuration: currentDuration;
 
   /* TRACK CSS VARIABLES */
 
@@ -49,19 +63,67 @@ export class MusicComponent implements OnInit{
     this.pages = [];
     this.reset();
     this.currentTrack = this.fileObject[0];
+    this.currentTime = {minutes: 0, seconds: 0};
+    this.currentDuration = {minutes: 0, seconds: 0}
   }
 
   constructor( private archiveService: ArchiveService, private authService: AuthService) {}
 
-  public async onSubmit(Data: Pick<Files, "name" | "file">): Promise<void> {
-    console.log(Data)
+  checkExistance(fileName: string, fileObjectName: string) {
+    if( fileName == fileObjectName ) {
+      return true;
+    } else {
+      return false
+    }
+  }
 
+  writeFileName(Data: Pick<Files, "name" | "file">) {
+    let givenName = Data.name;
     if(Data.name == null){
       const sendName = Data.file.name.split(".");
       Data.name = sendName[0];
-      console.log(sendName)
+      givenName = sendName[0];
     }
-    await this.archiveService.uploadFile(Data, this.authService.userId)
+
+    for(let i=0; i<this.fileObject.length; i++) {
+
+      const fileName = this.fileObject[i].name.split(".")
+
+      if(Data.name == fileName[0]) {
+
+        let j = 1;
+        let stop = true;
+        while(stop) {
+          let check = false;
+
+          for(let k=0; k < this.fileObject.length; k++) {
+
+            const fileName = this.fileObject[k].name.split(".");
+
+            if(this.checkExistance(`${givenName}(${j})`, `${fileName[0]}`)) {
+              j++;
+              check = true;
+              break;
+            }
+          }
+          if(check == false) {
+            Data.name = `${givenName}(${j})`;
+            stop = false;
+          }
+        }
+
+        if ( stop == false) {
+          break;
+        }
+      }
+    }
+
+    return Data;
+  }
+
+  public async onSubmit(Data: Pick<Files, "name" | "file">): Promise<void> {
+
+    await this.archiveService.uploadFile(this.writeFileName(Data), this.authService.userId)
     this.reset();
   }
 
@@ -71,8 +133,7 @@ export class MusicComponent implements OnInit{
     return this.archiveService.getFileObject(this.userId, this.typeName);
   }
 
-  getFiles(id_file: number): Promise<File> {
-    console.log(this.archiveService.getFile(id_file));
+  getFiles(id_file: number): Promise<ArrayBuffer> {
     return this.archiveService.getFile(id_file);
   }
 
@@ -127,6 +188,7 @@ export class MusicComponent implements OnInit{
       modelDiv.style.display = "flex";
     }
     this.idFileMusic = id_file;
+    console.log(this.idFileMusic);
     this.showDelete = true;
   }
 
@@ -166,65 +228,102 @@ export class MusicComponent implements OnInit{
   openMusic(currentIndex: number) {
     this.showMask = true;
     this.currentTrack = this.fileObject[currentIndex];
-    this.getFiles(this.currentTrack.id_file).then( (file) => {
-      this.currentTrack.fileStream = file;
+
+
+
+    this.loadSong(this.currentTrack);
+
+  }
+
+  loadSong(track: Files) {
+    this.getFiles(track.id_file).then( (file) => {
+
+      this.source = this.context.createBufferSource();
+      this.context.suspend();
+
+      this.context.decodeAudioData(file, (buf) => {
+        this.source.buffer = buf;
+        this.currentBuffer = this.source.buffer;
+        this.source.connect(this.context.destination);
+        this.currentTrack.audioStream = this.source;
+        this.context.resume();
+
+        this.context.addEventListener('statechange', () => {
+          console.log(this.context.state);
+          this.getTrackTime(this.currentBuffer, this.context)
+        })
+        this.source.start(0);
+
+      })
+
+
+    }).then( () => {
+      const playBtn = document.querySelector<HTMLButtonElement>('#play-track');
+      const trackContainer = document.querySelector('.track-container');
+
+      trackContainer.classList.add('play');
+      playBtn.querySelector('.play-button').classList.remove('bxs-right-arrow');
+      playBtn.querySelector('.play-button').classList.add('bx-pause');
     })
 
-    console.log(this.currentTrack.fileStream)
-    console.log(this.currentTrack.name + " / " + currentIndex)
-/*     this.loadSong(this.currentTrack); */
+
+  }
+
+  getTrackTime(currentBuffer: AudioBuffer, context: AudioContext) {
+
+    const secs = parseInt( `${currentBuffer.duration % 60}`, 10);
+    const mins = parseInt( `${(currentBuffer.duration/60) % 60}`, 10);
+
+    this.currentDuration.seconds = secs;
+    this.currentDuration.minutes = mins;
   }
 
   closeMusic() {
     this.showMask = false;
+    this.source.disconnect(this.context.destination);
   }
 
   /* PLAYER */
 
-  loadSong(song: Files) {
-    const trackAudio = document.querySelector<HTMLAudioElement>('#track-audio');
-    /* trackAudio = new Audio();
-    trackAudio.load();
-    trackAudio.play(); */
-    console.log(trackAudio)
-  }
-
-  //LISTENER
-
-  playSong() {
+  playSong(time: number, source: AudioBufferSourceNode) {
     const playBtn = document.querySelector<HTMLButtonElement>('#play-track');
     const trackContainer = document.querySelector('.track-container');
-    const trackAudio = document.querySelector<HTMLAudioElement>('#track-audio');
+
     trackContainer.classList.add('play');
     playBtn.querySelector('.play-button').classList.remove('bxs-right-arrow');
     playBtn.querySelector('.play-button').classList.add('bx-pause');
 
-    trackAudio.play();
+    if(time > 0 && this.context.state === 'suspended') {
+      this.context.resume();
+    }
   }
 
-  pauseSong() {
+  pauseSong(time: number, source: AudioBufferSourceNode) {
     const playBtn = document.querySelector<HTMLButtonElement>('#play-track');
     const trackContainer = document.querySelector('.track-container');
-    const trackAudio = document.querySelector<HTMLAudioElement>('#track-audio');
+
     trackContainer.classList.remove('play');
     playBtn.querySelector('.play-button').classList.remove('bx-pause');
     playBtn.querySelector('.play-button').classList.add('bxs-right-arrow');
 
-    trackAudio.pause();
+    if( this.context.state === 'running') {
+      this.context.suspend();
+    }
   }
 
 
-  play(index: number) {
+  play(index: number, source: AudioBufferSourceNode) {
+    console.log("ciao");
     const playBtn = document.querySelector<HTMLButtonElement>('#play-track');
     const trackContainer = document.querySelector('.track-container');
 
-    const isPlaying = trackContainer.classList.contains('play');
+    const isPlaying = trackContainer.classList.contains('play')
 
     if (isPlaying) {
-      this.pauseSong();
+      this.pauseSong(this.context.currentTime, source);
     }
     else {
-      this.playSong();
+      this.playSong(this.context.currentTime, source);
     }
 
   }
@@ -239,6 +338,10 @@ export class MusicComponent implements OnInit{
         this.changePage(this.pageIndex, "ArrowLeft");
       }
     }
+
+    this.source.disconnect(this.context.destination);
+    this.loadSong(this.currentTrack);
+
   }
 
   next(index: number) {
@@ -251,9 +354,13 @@ export class MusicComponent implements OnInit{
         this.changePage(this.pageIndex, "ArrowRight");
       }
     }
+
+    this.source.disconnect(this.context.destination);
+    this.loadSong(this.currentTrack);
+
   }
 
-  keyListener(index: number, event: KeyboardEvent) {
+  keyListener(index: number, event: KeyboardEvent, currentTrack: AudioBufferSourceNode) {
     if( this.showDownload == false && this.showDelete == false && this.showMask == true ){
       if(event.key == "ArrowRight") {
         this.next(index);
@@ -262,9 +369,9 @@ export class MusicComponent implements OnInit{
       } else if (event.key == "Delete") {
         this.openDelete(this.fileObject[index].id_file)
       } else if (event.key == "Escape") {
-        this.showMask = false;
-      } else if (event.key == "Enter") {
-        this.play(index);
+        this.closeMusic();
+      } else if (event.key == "Enter" || event.key == " ") {
+        this.play(index, currentTrack);
       }
     } else if ( this.showDownload == false && this.showDelete == false && this.showMask == false ) {
       if(event.key == "ArrowRight" && this.pageIndex < this.pages.length - 1) {

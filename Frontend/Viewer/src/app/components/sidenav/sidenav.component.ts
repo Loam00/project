@@ -2,6 +2,7 @@ import { Component, EventEmitter, HostListener, OnInit, Output } from '@angular/
 import { navbarData } from './navData';
 import { transition, trigger, style, animate, keyframes } from '@angular/animations';
 import { AuthService } from 'src/app/services/auth.service';
+import { ArchiveService } from 'src/app/services/archive.service';
 
 
 interface SideNavToggle {
@@ -57,7 +58,7 @@ export class SidenavComponent implements OnInit {
     }
   }
 
-  constructor(private AuthService: AuthService) {};
+  constructor(private AuthService: AuthService, private archiveService: ArchiveService) {};
 
   ngOnInit(): void {
     this.screenWidth = window.innerWidth;

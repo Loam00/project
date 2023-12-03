@@ -7,7 +7,7 @@
 
     <!-- MODALE EDIT -->
 
-    <app-modal-edit [(isEdit)]="showEdit" [formData]="this.editForm" (editResult)="edit($event)"></app-modal-edit>
+    <app-modal-edit [(isEdit)]="showEdit" [formNoteData]="this.editForm" [type]="this.editType" (editResult)="edit($event)"></app-modal-edit>
 
     <!-- SHOW NOTE -->
 
@@ -47,6 +47,8 @@
         </div>
 
         <textarea disabled>{{currentNote.text}}</textarea>
+
+        <span class="date">{{currentNote.created}}</span>
 
       </div>
 

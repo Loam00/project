@@ -5,13 +5,21 @@
         <h1>Edit</h1>
 
         <div class="wrapper">
-          <form #formDirective="ngForm" [formGroup]="noteForm" (ngSubmit)="edit(noteForm.value)" novalidate>
+          <form #formDirective="ngForm" [formGroup]="noteForm" (ngSubmit)="edit(formControl1.value, formControl2.value)" novalidate>
 
-            <div class="input-box">
-              <input type="text" placeholder="Title" formControlName="title" required>
+            <div class="input-box" *ngIf="check">
+              <input type="text" placeholder="Object" [formControl]="formControl1" required>
             </div>
 
-            <textarea type="text" placeholder="Text" formControlName="text" (keyup)="resizeTextarea($event)" required></textarea>
+            <div class="input-box" *ngIf="check">
+              <input type="number" step="0.01" placeholder="Amount" [formControl]="formControl2" required>
+            </div>
+
+            <div class="input-box" *ngIf="!check">
+              <input type="text" placeholder="Title" [formControl]="formControl1" required>
+            </div>
+
+            <textarea *ngIf="!check" type="text" placeholder="Text" [formControl]="formControl2" (keyup)="resizeTextarea($event)" required></textarea>
 
             <div class="btn-modal">
               <button type="submit" [disabled]="!noteForm.valid">

@@ -1,70 +1,82 @@
-import { Component,OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { Component, OnInit, DoCheck, OnChanges, SimpleChanges, Input } from '@angular/core';
+import { navDataArchive } from './navDataArchive';
+import { Router } from '@angular/router';
 import { Files } from 'src/app/models/Files';
-import { User } from 'src/app/models/User';
 import { ArchiveService } from 'src/app/services/archive.service';
 import { AuthService } from 'src/app/services/auth.service';
-import { navDataArchive } from './navDataArchive';
+import { User } from 'src/app/models/User';
 
 @Component({
   selector: 'app-archive',
   templateUrl: './archive.component.html',
   styleUrls: ['./archive.component.css']
 })
-export class ArchiveComponent implements OnInit {
+export class ArchiveComponent implements OnInit, DoCheck{
 
-  showMask = false;
-  showCount = false;
-  currentIndex = 0;
-  totalCount = 0;
-  fileText = "Choose your file";
-  currentLightboxImage: Files;
-  check = false;
-  files: Files[];
-  form: FormGroup;
-  imageData: string;
-  userId: Pick<User, "id_user"> | number;
-  idFile: number;
   navDataArchive = navDataArchive;
+  checkRoute: boolean;
+  lastImages: Files[];
+  lastDocuments: Files[];
+  lastTracks: Files[];
+  userId: Pick<User, "id_user">;
+  checkImages = false;
 
-  data: any;
+  constructor( private router: Router, private archiveService: ArchiveService, private authService: AuthService) {}
 
   ngOnInit(): void {
     this.userId = this.authService.userId;
-    this.files = [];
-    this.form = new FormGroup({
-      name: new FormControl(null),
-      file: new FormControl(null)
-    });
-/*     this.reset(); */
-    this.currentLightboxImage = this.files[0];
+    this.lastImages = [];
+    this.lastDocuments = [];
+    this.lastTracks = [];
+    this.reset();
   }
 
-  constructor( private archiveService: ArchiveService, private authService: AuthService) {}
-
-/*
-  openGalleryAtImage(index: number) {
-    this.showMask = true;
-    this.currentIndex = index;
-    this.currentLightboxImage = this.files[index]
-    this.totalCount = this.files.length;
+  ngDoCheck(): void {
+    if ( this.router.url == "/archive") {
+      this.checkRoute = true;
+    } else {
+      this.checkRoute = false;
+    }
   }
 
-  closeGallery() {
-    this.showMask = false;
+  getLastImages(): Promise<Files[]> {
+    return this.archiveService.getFileObject(this.userId, "image");
   }
 
-  prev(index: number) {
-    this.currentLightboxImage = this.files[index - 1];
-    this.currentIndex = index - 1;
+  getLastDocuments(): Promise<Files[]> {
+    return this.archiveService.getFileObject(this.userId, "application");
   }
 
-  next(index: number) {
-    this.currentLightboxImage = this.files[index + 1];
-    this.currentIndex = index + 1;
+  getLastTracks(): Promise<Files[]> {
+    return this.archiveService.getFileObject(this.userId, "audio");
   }
 
-  downloadFile() {
+  reset() {
+    this.getLastImages().then( (images) => {
+      let length;
+      if ( images.length < 4) {
+        length = images.length;
+      } else {
+        length = 4;
+      }
 
-  } */
+      if ( images.length != 0) {
+        for( let i=0; i < length; i++) {
+          this.lastImages[i] = images[images.length - (length - i)];
+          this.lastImages[i].path = "http://localhost:3000/" + images[images.length - (length - i)].path;
+        }
+      } else if ( images.length == 0) {
+        this.checkImages = true;
+      }
+    })
+
+    this.getLastDocuments().then( (documents) => {
+
+    })
+
+    this.getLastTracks().then( (tracks) => {
+
+    })
+  }
+
 }

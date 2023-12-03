@@ -280,7 +280,7 @@
   border-radius: 20px;
   padding: 30px;
   width: 800px;
-  max-height: 800px;
+  max-height: 820px;
   display: flex;
   flex-direction: column;
 }
@@ -299,6 +299,13 @@
   resize: none;
   color: white;
   min-height: 642px;
+}
+
+.date {
+  justify-content: end;
+  display: flex;
+  margin-right: 20px;
+  font-style: italic;
 }
 
 .noteBoxHeader {

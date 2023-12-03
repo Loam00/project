@@ -1,4 +1,4 @@
-<div class="page" (window:keydown)="keyListener(currentIndex, $event)">
+<div class="page" (window:keydown)="keyListener(currentIndex, $event, currentTrack.audioStream)">
 
   <!-- MODALE DELETE -->
 
@@ -33,11 +33,11 @@
           <div class="progress-container">
             <div class="progress"></div>
           </div>
+          <div class="time">
+            <span>{{currentTime.minutes + ":" + currentTime.seconds}}</span>
+            <span>{{currentDuration.minutes + ":" + currentDuration.seconds}}</span>
+          </div>
         </div>
-
-        <audio crossorigin="anonymous" id="track-audio">
-          <source [src]="this.currentTrack.fileStream" type="audio/mpeg">
-        </audio>
 
         <div class="img-container">
           <img [src]="defaultIMG" id="track-cover">
@@ -49,7 +49,7 @@
             <i class='bx bx-skip-previous' ></i>
           </button>
 
-          <button id="play-track" class="nav-btn play-btn" (click)="play(currentIndex)">
+          <button id="play-track" class="nav-btn play-btn" (click)="play(currentIndex, currentTrack.audioStream)">
             <i class='play-button bx bxs-right-arrow'></i>
           </button>
 

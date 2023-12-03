@@ -56,7 +56,7 @@
 
       <div class="wrapper1" *ngIf="check">
 
-          <div class="file-element" *ngFor="let file of files | slice:leftExtrem:rightExtrem + 1; index as fileNumber;">
+          <div class="file-element" *ngFor="let file of fileObject | slice:leftExtrem:rightExtrem + 1; index as fileNumber;">
 
             <div class="img-container">
               <img class="img-display" src={{file.path}} alt={{file.name}} (click)="openGalleryAtImage(fileNumber)" loading="lazy">

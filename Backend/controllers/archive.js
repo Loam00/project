@@ -1,5 +1,5 @@
 const { validationResult, header } = require('express-validator');
-const Archive = require('../Models/archive');
+const Archive = require('../Models/Archive');
 const fs = require('fs')
 
 exports.storeFile = async (req, res) => {
@@ -51,9 +51,7 @@ exports.getFile = async (req, res) => {
         const id_file = req.params.id_file;
         const [allFiles] = await Archive.getFile(id_file);
 
-        console.log(`${allFiles.path}  // ${allFiles.type}`);  
-        res.status(200).type(`${allFiles.type}/mpeg`).sendFile(`C:/Users/Stefano/Documents/GitHub/project/Backend/${allFiles.path}`);
-        console.log(res) 
+        res.status(200).sendFile(`C:/Users/Stefano/Documents/GitHub/project/Backend/${allFiles.path}`);
     } catch (err) {
         if (!err.statusCode) {
             err.statusCode = 500;
@@ -82,10 +80,9 @@ exports.deleteFile = async (req, res) => {
         const [getPath] = await Archive.getPathFromId(id_file);
         fileName = getPath.path.split("/");
 
-        const deleteFile = await fs.unlink(`C:/Users/Stefano/Desktop/Programmi/NewProject/Backend/${folder}/${fileName[1]}`, (err) => {
+        const deleteFile = await fs.unlink(`C:/Users/Stefano/Documents/GitHub/project/Backend/${folder}/${fileName[1]}`, (err) => {
             if(err) throw err;
         });
-        console.log(deleteFile);
 
         const deleteResponse = await Archive.deleteFile(id_file);
         res.status(200).json(deleteResponse);

@@ -35,6 +35,7 @@ export class NotesComponent implements OnInit {
   currentNote: Note;
   currentIndex: number;
   pageIndex = 0;
+  editType = "notes";
 
   constructor(private NotesService: NotesService, private authService: AuthService) {};
 
@@ -157,9 +158,8 @@ export class NotesComponent implements OnInit {
     {
       this.currentNote = this.notes[this.currentIndex - 1];
       this.currentIndex = this.currentIndex - 1;
-    } else {
-      this.currentNote = this.notes[this.currentIndex + 1];
     }
+
     this.reset();
   }
 

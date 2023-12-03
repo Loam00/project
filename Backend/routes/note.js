@@ -4,8 +4,6 @@ const { body } = require('express-validator');
 
 const router = express.Router();
 
-const auth = require('../middleware/auth')
-
 const noteController = require('../controllers/note')
 
 router.post(

@@ -91,7 +91,7 @@
   align-items: center;
 }
 
-/* LIGHTBOX IMAGE */
+/* LIGHTBOX */
 
 .lightbox {
   display: flex;
@@ -284,6 +284,13 @@
   height: 100%;
   width: 0%;
   transition: width 0.1s linear;
+}
+
+.time {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 5px;
 }
 
 /* CHANGE PAGE */
